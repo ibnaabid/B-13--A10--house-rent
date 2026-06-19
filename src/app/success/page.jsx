@@ -58,20 +58,23 @@ export default async function Success({ searchParams }) {
           body:    JSON.stringify(bookingData),
         });
 
-        if (postRes.ok) {
           const result = await postRes.json();
+          console.log(result,"postbooking")
+
+          if(result){
+            
           console.log("Booking created successfully! Server Response:", result);
-        } else {
+
+          }
+        else {
           throw new Error("Failed to create a new booking");
         }
-      } else {
-        console.log("Booking already exists for this session.");
-      }
+      } 
     } catch (error) {
       console.error("Error in booking process:", error.message);
     }
 
-    
+
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-16">
         <div className="max-w-md w-full">

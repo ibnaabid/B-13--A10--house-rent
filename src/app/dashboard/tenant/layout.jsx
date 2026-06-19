@@ -5,7 +5,7 @@ import TenantSideBar from "@/app/tenantsidebar/page";
 export default function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen">
-      <aside className="w-64 bg-slate-900 text-white">
+      <aside className="w-49 bg-slate-900 text-white">
         <TenantSideBar></TenantSideBar>
       </aside>
 

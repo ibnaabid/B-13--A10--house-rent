@@ -37,7 +37,7 @@ export default function DashboardLayout({ children }) {
           </Link>
 
           <Link
-            href="/dashboard/tenant/bookings"
+            href="/dashboard/tenant/booking"
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition"
           >
             <BookOpen size={18} />
@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }) {
           </Link>
 
           <Link
-            href="/dashboard/profile"
+            href="/dashboard/tenant/profile"
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition"
           >
             <User size={18} />
@@ -75,27 +75,7 @@ export default function DashboardLayout({ children }) {
       <div className="flex-1 flex flex-col">
 
         {/* Topbar */}
-        <header className="h-20 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-8">
-          <div>
-            <h2 className="text-white text-xl font-bold">
-              Welcome Back 👋
-            </h2>
-            <p className="text-slate-400 text-sm">
-              Manage your bookings and favorites
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Image
-            height={300}
-            width={300}
-              src="https://i.pravatar.cc/150"
-              alt="profile"
-              className="w-11 h-11 rounded-full border-2 border-blue-500"
-            />
-          </div>
-        </header>
-
+        
         {/* Page Content */}
         <main className="flex-1 p-8 bg-slate-950">
           {children}
