@@ -24,8 +24,9 @@ export default function Navbar() {
   const [userOpen, setUserOpen] = useState(false);
 
   const { data: session, isPending } = authClient.useSession();
+  console.log(session,"useSession")
   const role = session?.user?.role;
-  console.log(role)
+  console.log("role",role)
 
   const navLinks = [
     { label: "Home", href: "/", icon: Home },
@@ -80,8 +81,6 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-
-            {/* 🔥 ডেস্কটপ মেইন মেনুতে ড্যাশবোর্ড লিঙ্ক (রোল অনুযায়ী) */}
             {session && dashboardLink && (
               <Link
                 href={dashboardLink}
@@ -132,12 +131,11 @@ export default function Navbar() {
                     <div className="px-4 py-3.5 bg-slate-950/40 border-b border-slate-800/60">
                       <p className="text-sm font-bold text-white truncate">{session.user.name}</p>
                       <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5 font-semibold">
-                        Role: <span className="text-blue-400">{role}</span>
+                        Role: <span className="text-blue-400">USER:{role}</span>
                       </p>
                     </div>
 
                     <div className="p-1.5 space-y-1">
-                      {/* 🔥 প্রোফাইল ড্রপডাউনের ভেতরেও ড্যাশবোর্ড লিঙ্ক */}
                       {dashboardLink && (
                         <Link
                           href={dashboardLink}
@@ -150,7 +148,7 @@ export default function Navbar() {
 
                       <button
                         onClick={logout}
-                        className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 rounded-xl transition-all text-left font-medium"
+                        className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-red-400 hover:bg-red-600 rounded-xl transition-all text-left font-medium"
                       >
                         <LogOut size={14} /> Logout
                       </button>

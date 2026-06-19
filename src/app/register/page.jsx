@@ -7,7 +7,7 @@ import { authClient } from "../lib/auth-client";
 import { User2 } from "lucide-react";
 
 export default function RegisterForm() {
-  const router = useRouter();
+ 
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,7 +23,6 @@ export default function RegisterForm() {
     });
   };
 
-  // 🔥 REGISTER FIXED (IMPORTANT PART)
   const handleSubmit = async (e) => {
     e.preventDefault();
 

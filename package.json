@@ -11,9 +11,8 @@
   "dependencies": {
     "@better-auth/mongo-adapter": "^1.6.19",
     "@gravity-ui/icons": "^2.18.0",
-    "@heroui/react": "^3.2.1",
-    "@heroui/styles": "^3.2.1",
     "better-auth": "^1.6.19",
+    "daisyui": "^5.5.23",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.21.0",
     "mongodb": "^7.3.0",
@@ -21,6 +20,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.6.0",
     "recharts": "^3.8.1",
     "stripe": "^22.2.2"
   },

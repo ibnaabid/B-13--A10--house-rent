@@ -12,12 +12,12 @@ const HomeDetailsCard = ({ data }) => {
     <div className="max-w-3xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl text-white">
 
       {/* IMAGE */}
-      <div className="relative h-72">
+      <div className="relative w-full h-72">
         <Image
                      src={data.image || "https://via.placeholder.com/400"}
                      alt={data.title}
-                     height={500}
-                     width={500}
+                     height={300}
+                     width={300}
                      className="object-cover"
                    />
 

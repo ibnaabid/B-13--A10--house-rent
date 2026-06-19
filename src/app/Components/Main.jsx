@@ -25,7 +25,7 @@ const Hero = () => {
     <section 
       className="relative min-h-[90vh] flex items-center justify-center bg-cover bg-center bg-no-repeat text-white"
       style={{
-        backgroundImage: "url('/assest/roman-marchenko-9z722EqoSyc-unsplash.jpg')",
+        backgroundImage: "url('/chris-orcutt-DmEX6_oQI-U-unsplash.jpg')",
       }}
     >
       {/* Premium Dark Overlay (DaisyUI-এর মতো কিন্তু আরও রিচ লুকের জন্য Slate-900 মিক্সড) */}
@@ -42,7 +42,7 @@ const Hero = () => {
           {/* স্মল গ্লোয়িং ব্যাজ */}
           <motion.div variants={itemVariants} className="inline-block">
             <span className="px-4 py-1.5 bg-blue-500/10 text-blue-400 text-xs font-bold tracking-wider uppercase rounded-full border border-blue-500/30 backdrop-blur-md">
-              ✨ Welcome to RentSphere Marketplace
+              ✨ Welcome to HouseRent Marketplace 
             </span>
           </motion.div>
 

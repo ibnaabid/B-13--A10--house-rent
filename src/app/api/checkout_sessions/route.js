@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 
-import { stripe } from "../../../lib/stripe";
 import { auth } from "@/app/lib/auth";
+import { stripe } from "@/app/lib/stripe";
 
 export async function POST(req) {
   try {
@@ -34,14 +34,13 @@ export async function POST(req) {
         {
           price_data: {
             currency: "usd",
-            
-            unit_amount: Number(amount) * 100,
+
+            unit_amount: amount * 100,
 
             product_data: {
               name: propertyName,
-              description: `Property Booking Fee`,
+              description: "Property Booking Fee",
             },
-
           },
 
           quantity: 1,
@@ -49,13 +48,13 @@ export async function POST(req) {
       ],
 
       metadata: {
-        propertyId,
-        propertyName,
-        price_data,
+        propertyId: propertyId || "",
+        propertyName: propertyName || "",
+        amount: String(amount),
         userEmail: user?.email || "",
-        moveInDate,
-        phone,
-        notes,
+        moveInDate: moveInDate || "",
+        phone: phone || "",
+        notes: notes || "",
       },
 
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -65,7 +64,7 @@ export async function POST(req) {
 
     return NextResponse.redirect(stripeSession.url, 303);
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     return NextResponse.json(
       {

@@ -20,7 +20,7 @@ export default function LoginPage() {
     if (isPending) return;
     if (!session?.user) return;
 
-    const role = session.user.role;
+    const role = session?.user?.role;
     if (role === "owner") {
       router.push("/dashboard/owner");
     } else if (role === "tenant") {
@@ -33,35 +33,31 @@ export default function LoginPage() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  try {
+    const { error } = await authClient.signIn.email({
+      email: formData.email,
+      password: formData.password,
+    });
 
-    try {
-      const { data, error } = await authClient.signIn.email({
-        email: formData.email,
-        password: formData.password,
-      });
-
-      if (error) {
-        toast.error(error.message || "Login Failed");
-        setIsSubmitting(false);
-        return;
-      }
-
-      toast.success("Login successful!");
-      
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-
-    } catch (err) {
-      toast.error("Something went wrong");
+    if (error) {
+      toast.error(error.message || "Login Failed");
       setIsSubmitting(false);
+      return;
     }
-  };
 
+    toast.success("Login successful!");
+
+    setIsSubmitting(false);
+
+  } catch (err) {
+    toast.error("Something went wrong");
+    setIsSubmitting(false);
+  }
+};
   const handleGoogleLogin = async () => {
     try {
       await authClient.signIn.social({
