@@ -3,37 +3,38 @@
 import { Heart, X, MapPin, Bed, Bath, DollarSign } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import FavBtn from "./FavBtn";
 
 const HomeDetailsCard = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isFav, setIsFav] = useState(false);
+
 
   return (
     <div className="max-w-3xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl text-white">
 
       {/* IMAGE */}
       <div className="relative w-full h-72">
-        <Image
-                     src={data.image || "https://via.placeholder.com/400"}
-                     alt={data.title}
-                     height={300}
-                     width={300}
-                     className="object-cover"
-                   />
-
+       <Image
+          src={data?.image || "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=600"}
+          alt={data?.title || "Property Image"}
+          fill 
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          sizes="(max-width: 768px) 100vw, 400px"
+        />
         <div className="absolute top-4 left-4 bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs">
           {data?.status || "Pending"}
         </div>
       </div>
 
-      {/* CONTENT */}
-      <div className="p-6 space-y-3">
+   <div className="p-6 space-y-4 bg-slate-900">
+      
+        <h1 className="text-xl font-bold text-white tracking-tight line-clamp-1 group-hover:text-blue-400 transition-colors">
+          {data?.title || "Exclusive Luxury Villa"}
+        </h1>
 
-        <h1 className="text-2xl font-bold">{data?.title}</h1>
-
-        <div className="flex items-center gap-2 text-slate-300">
-          <MapPin size={16} />
-          {data?.location}
+        <div className="flex items-center gap-2 text-slate-400 text-sm">
+          <MapPin size={16} className="text-blue-500 flex-shrink-0" />
+          <span className="line-clamp-1">{data?.location || "Dhaka, Bangladesh"}</span>
         </div>
 
         <div className="flex gap-6 text-slate-300">
@@ -53,15 +54,9 @@ const HomeDetailsCard = ({ data }) => {
           >
             Book Now
           </button>
+          <FavBtn data={data}></FavBtn>
 
-          <button
-            onClick={() => setIsFav(!isFav)}
-            className={`px-5 py-3 rounded-xl border ${
-              isFav ? "bg-red-500/20 border-red-500 text-red-400" : "border-slate-700"
-            }`}
-          >
-            <Heart className={isFav ? "fill-red-400" : ""} />
-          </button>
+         
 
         </div>
       </div>
