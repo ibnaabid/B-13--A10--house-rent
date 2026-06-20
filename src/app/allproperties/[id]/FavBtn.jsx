@@ -23,11 +23,12 @@ const FavBtn = ({ data, userId }) => {
         body: JSON.stringify({
           userId,
           propertyId: data?._id,
+          title:data?.title
         }),
       });
 
       const result = await res.json();
-       console.log(result,"favorite")
+      
 
       if (res.ok) {
         setIsFav(true);

@@ -28,7 +28,7 @@ export default function OwnerDashboard() {
 
   const [analytics, setAnalytics] = useState(null);
 
-  // 🔥 AUTH PROTECTION
+ 
   useEffect(() => {
     if (isPending) return;
 

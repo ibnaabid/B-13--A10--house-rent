@@ -9,15 +9,8 @@ const Page = () => {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user?.role;
 
-    if (!session?.user) {
-      redirect("/login");
-      return;
-    }
+  
 
-    if (user!== "owner") {
-      redirect("/");
-      return;
-    }
 
   if (isPending) {
     return <div className="text-white text-center mt-10">Loading...</div>;
