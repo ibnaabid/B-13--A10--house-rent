@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Mail, Home, Calendar } from "lucide-react";
 import { stripe } from "../lib/stripe";
+// import { stripe } from "../lib/stripe";
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;
@@ -24,22 +25,16 @@ export default async function Success({ searchParams }) {
 
   if (status === "complete") {
     try {
-      // ১. বুকিং ইতিমধ্যে ডাটাবেজে আছে কি না চেক করা (ক্যামেলকেস ফিক্স করা )
+      // ১. বুকিং ইতিমধ্যে ডাটাবেজে আছে কি না চেক করা
       const checkRes = await fetch(
-        `http://localhost:5000/Bookings/${session_id}`, 
+        `http://localhost:5000/Bookings/${session_id}`,
         { cache: "no-store" }
       );
-      
-      console.log(checkRes,"check")
 
-      if (!checkRes.ok) {
-        throw new Error("Failed to check existing booking");
-      }
+      const checkData = await checkRes.json();
+      console.log(checkData,"cjec")
 
-      const {exists}  = await checkRes.json();
-      
-
-      if (exists) {
+      if (!checkData.exists) {
         const bookingData = {
           sessionId:     session_id,
           propertyId:    metadata?.propertyId,
@@ -61,22 +56,19 @@ export default async function Success({ searchParams }) {
           body:    JSON.stringify(bookingData),
         });
 
-          const result = await postRes.json();
-          console.log(result,"postbooking")
-
-          if(result){
-            
-          console.log("Booking created successfully! Server Response:", result);
-
-          }
-        else {
+        if (!postRes.ok) {
           throw new Error("Failed to create a new booking");
         }
-      } 
+
+        const result = await postRes.json();
+        console.log("BOOKING CREATED SUCCESSFULLY:", result);
+      } else {
+        console.log("Booking already exists in Database. Skipping insert.");
+      }
+
     } catch (error) {
       console.error("Error in booking process:", error.message);
     }
-
 
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-16">

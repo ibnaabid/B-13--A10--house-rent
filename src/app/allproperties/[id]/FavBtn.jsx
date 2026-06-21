@@ -43,7 +43,9 @@ const FavBtn = ({ data }) => {
       } else {
         toast.error(result.message || "Failed");
       }
-    } catch (error) {
+    } catch (error)
+     {
+      console.log(error,"erroe")
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
