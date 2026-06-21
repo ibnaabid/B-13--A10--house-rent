@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { headers } from 'next/headers';
 import { auth } from './app/lib/auth';
+import { url } from 'better-auth';
 // import next from 'next';
 
 export async function proxy(request) {
@@ -11,7 +12,8 @@ export async function proxy(request) {
     headers: await headers(),
   });
 
-  console.log(session)
+  const UserEmail =session?.user?.email;
+  const pass = session?.user?.password
 
   const user = session?.user?.role;
   
@@ -29,9 +31,13 @@ export async function proxy(request) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  if(!UserEmail === "mdibnaabid123@gmail.com" & !pass === "123456789"){
+ return NextResponse.redirect(new URL("/login", request.url))
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/allproperties',"/allproperties/:id","/dashboard/tenant"],
+  matcher: ['/allproperties',"/allproperties/:id","/dashboard/tenant","/dashboard/admin"],
 }

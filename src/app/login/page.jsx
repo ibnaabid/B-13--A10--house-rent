@@ -19,6 +19,16 @@ export default function LoginPage() {
     if (isPending) return;
     if (!session?.user) return;
 
+    const userEmail = session?.user?.email;
+    const userPass = session?.user.password;
+
+    if(userEmail === "mdibnaabid123@gmail.com" & userPass === "123456789"){
+      router.push("/dashboard/admin")
+    }
+    else{
+      redirect("/")
+    }
+
     const role = session?.user?.role;
     if (role === "owner") {
       router.push("/dashboard/owner");
@@ -68,12 +78,6 @@ const handleLogin = async (e) => {
     }
   };
 
-
-  const email= session?.user?.email;
-  const password = session?.user?.password;
-  if(email & password ==="mdibnaabid123@gmail.com" & ""){
-    router.push("/dashboard/admin")
-  }
 
   if (isPending) {
     return (
