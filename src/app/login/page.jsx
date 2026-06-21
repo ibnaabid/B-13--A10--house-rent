@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // অটো রিডাইরেকশন ট্র্যাকিং (পেজ লোডে অলরেডি লগইন থাকলে)
   useEffect(() => {
     if (isPending) return;
     if (!session?.user) return;

@@ -7,7 +7,17 @@ const Page = () => {
   const router = useRouter()
  
   const { data: session, isPending } = authClient.useSession();
-  const user = session?.user?.role;
+ 
+
+if (!session?.user) {
+  redirect("/login");
+  return;
+}
+
+if (session.user.role !== "tenant") {
+  redirect("/");
+  return;
+}
 
   
 

@@ -10,6 +10,9 @@ await client.connect();
 const db = client.db("HouseRent");
 
 export const auth = betterAuth({
+  
+    baseURL: process.env.BETTER_AUTH_URL, 
+    
   database: mongodbAdapter(db),
   user: {
     additionalFields: {
@@ -24,9 +27,9 @@ export const auth = betterAuth({
     enabled: true,
   },
   socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ,
     },
   },
 });
