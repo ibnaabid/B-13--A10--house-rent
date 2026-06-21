@@ -1,17 +1,41 @@
-import { HeartCrack } from 'lucide-react';
-import React from 'react';
+"use client";
 
-const DelteFav = () => {
-    return (
-        <div>
-            <button
-                      className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
-                    >
-                      <HeartCrack size={18} />
-                      Dislike
-                    </button>
-        </div>
-    );
+import { HeartCrack } from "lucide-react";
+import toast from "react-hot-toast";
+
+const DelteFav = ({ item }) => {
+  const dishandler = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/favorites/${item._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await res.json();
+      console.log(data);
+
+      if (res.ok) {
+        toast.success("Removed from favorites");
+      } else {
+        toast.error("Failed to remove");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  return (
+    <button
+      onClick={dishandler}
+      className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+    >
+      <HeartCrack size={18} />
+      Dislike
+    </button>
+  );
 };
 
 export default DelteFav;
