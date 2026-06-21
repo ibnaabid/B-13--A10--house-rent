@@ -77,7 +77,7 @@ const page = async () => {
                 </span>
 <Link href={`/allproperties/${item._id}`}>
 
-                <button className="text-xs bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-lg transition">
+                <button className="text-xl  bg-violet-500  hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition">
                   View Details
                 </button></Link>
 

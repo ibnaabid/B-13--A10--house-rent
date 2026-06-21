@@ -148,10 +148,10 @@ export default async function Success({ searchParams }) {
               </p>
 
               <Link
-                href="/bookings"
+                href="/allproperties"
                 className="flex items-center justify-center w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold text-sm transition-all"
               >
-                View My Bookings
+                Add More Bookings
               </Link>
             </div>
 

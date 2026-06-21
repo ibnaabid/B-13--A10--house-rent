@@ -70,7 +70,7 @@ const Hero = () => {
           >
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Link
-                href="/all-properties"
+                href="/allproperties"
                 className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2 group text-sm sm:text-base"
               >
                 <Home size={18} /> Browse Homes 

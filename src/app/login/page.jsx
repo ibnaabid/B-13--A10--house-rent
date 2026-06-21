@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/app/lib/auth-client"; 
 import { Mail, Lock, Loader2, LogIn, Home } from "lucide-react";
@@ -67,6 +67,13 @@ const handleLogin = async (e) => {
       toast.error("Something went wrong");
     }
   };
+
+
+  const email= session?.user?.email;
+  const password = session?.user?.password;
+  if(email & password ==="mdibnaabid123@gmail.com" & ""){
+    router.push("/dashboard/admin")
+  }
 
   if (isPending) {
     return (

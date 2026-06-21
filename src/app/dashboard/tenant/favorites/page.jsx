@@ -1,100 +1,71 @@
-"use client";
+import { HeartCrack, Trash2 } from "lucide-react";
+import DelteFav from "./DelteFav";
+const Page = async () => {
+  const res = await fetch("http://localhost:5000/favorites", {
+    cache: "no-store",
+  });
 
-import { useEffect, useState } from "react";
-import { Table, Button, Checkbox } from "@heroui/react";
-import { Trash2Icon } from "lucide-react";
-import toast from "react-hot-toast";
-import { useSession } from "@/app/lib/auth-client";
-
-export default function FavoritesTable() {
-  const [favorites, setFavorites] = useState([]);
-  const [selectedKeys, setSelectedKeys] = useState(new Set());
-  
-  const { data: session } = useSession(); 
-  const userId = session?.user?.id; 
-
-  // ফেভারিট ডেটা লোড করার ফাংশন
-  const fetchFavorites = async ({userId}) => {
-    if (!userId) return; 
-    
-    try {
-      const res = await fetch(`http://localhost:5000/favorites/${userId}`);
-      const data = await res.json();
-      setFavorites(data);
-    } catch (err) {
-      console.log("Fetch error:", err);
-    }
-  };
-
-  // যখনই userId পাওয়া যাবে, তখনই ডেটা ফেচ হবে
-  useEffect(() => {
-    fetchFavorites();
-  }, [userId]);
-
-  // ডিলিট করার ফাংশন
-  const handleDelete = async (id) => {
-    try {
-      const res = await fetch(`http://localhost:5000/favorites/${id}`, {
-        method: "DELETE",
-      });
-      
-      if (res.ok) {
-        toast.success("Deleted from favorites");
-        setFavorites((prev) => prev.filter((item) => item._id !== id));
-      }
-    } catch (err) {
-      console.log("Delete error:", err);
-    }
-  };
+  const data = await res.json();
 
   return (
-    <Table>
-      <Table.ScrollContainer>
-        <Table.Content
-          aria-label="Favorites Table"
-          className="min-w-[700px]"
-          selectionMode="multiple"
-          selectedKeys={selectedKeys}
-          onSelectionChange={setSelectedKeys}
-        >
-          {/* HEADER */}
-          <Table.Header>
-            <Table.Column className="pr-0">
-              <Checkbox slot="selection" aria-label="Select all" />
-            </Table.Column>
-            <Table.Column isRowHeader id="id">ID</Table.Column>
-            <Table.Column id="title">Title</Table.Column> {/* 👈 আপনার রিকোয়েস্ট অনুযায়ী title কলাম */}
-            <Table.Column id="name">Name</Table.Column>
-            <Table.Column className="text-end">Actions</Table.Column>
-          </Table.Header>
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
+        <div className="p-6 border-b">
+          <h1 className="text-3xl font-bold">Favorite Properties</h1>
+          <p className="text-gray-500 mt-1">
+            Total Favorites: {data.length}
+          </p>
+        </div>
 
-          {/* BODY */}
-          <Table.Body>
-            {favorites.map((item) => (
-              <Table.Row key={item._id} id={item._id}>
-                <Table.Cell className="pr-0">
-                  <Checkbox slot="selection" />
-                </Table.Cell>
-                <Table.Cell>#{item._id?.slice(-6)}</Table.Cell> {/* আইডি ছোট করে দেখানোর জন্য */}
-                <Table.Cell>{item.title}</Table.Cell> {/* 👈 ব্যাকএন্ডের title শো করবে */}
-                <Table.Cell>{item.name}</Table.Cell>
-                <Table.Cell>
-                  <div className="flex justify-end">
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="danger-soft"
-                      onClick={() => handleDelete(item._id)}
-                    >
-                      <Trash2Icon className="size-4" />
-                    </Button>
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Content>
-      </Table.ScrollContainer>
-    </Table>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-black text-white">
+              <tr>
+                <th className="px-6 py-4 text-left">#</th>
+                <th className="px-6 py-4 text-left">Title</th>
+                <th className="px-6 py-4 text-left">Name</th>
+                <th className="px-6 py-4 text-left">Property ID</th>
+                <th className="px-6 py-4 text-center">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {data.map((item, index) => (
+                <tr
+                  key={item._id}
+                  className="border-b hover:bg-gray-50 transition"
+                >
+                  <td className="px-6 py-4">{index + 1}</td>
+
+                  <td className="px-6 py-4 font-medium">
+                    {item.title}
+                  </td>
+
+                  <td className="px-6 py-4">
+                    {item.name}
+                  </td>
+
+                  <td className="px-6 py-4 text-gray-500">
+                    {item.propertyId}
+                  </td>
+
+                  <td className="px-6 py-4 flex justify-center">
+                    <DelteFav item={item}></DelteFav>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {data.length === 0 && (
+            <div className="text-center py-10 text-gray-500">
+              No favorite property found.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Page;
