@@ -4,15 +4,21 @@ import { useEffect, useState } from "react";
 import { Table, Button, Checkbox } from "@heroui/react";
 import { Trash2Icon } from "lucide-react";
 import toast from "react-hot-toast";
-// import { Icon } from "lucide-react";
+import { useSession } from "@/app/lib/auth-client";
 
 export default function FavoritesTable() {
   const [favorites, setFavorites] = useState([]);
   const [selectedKeys, setSelectedKeys] = useState(new Set());
+  
+  const { data: session } = useSession(); 
+  const userId = session?.user?.id; 
 
-  const fetchFavorites = async () => {
+  // ফেভারিট ডেটা লোড করার ফাংশন
+  const fetchFavorites = async ({userId}) => {
+    if (!userId) return; 
+    
     try {
-      const res = await fetch("http://localhost:5000/favorites");
+      const res = await fetch(`http://localhost:5000/favorites/${userId}`);
       const data = await res.json();
       setFavorites(data);
     } catch (err) {
@@ -20,17 +26,22 @@ export default function FavoritesTable() {
     }
   };
 
+  // যখনই userId পাওয়া যাবে, তখনই ডেটা ফেচ হবে
   useEffect(() => {
     fetchFavorites();
-  }, []);
+  }, [userId]);
 
+  // ডিলিট করার ফাংশন
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5000/favorites/${id}`, {
+      const res = await fetch(`http://localhost:5000/favorites/${id}`, {
         method: "DELETE",
       });
-toast.success("delete favorite")
-      setFavorites((prev) => prev.filter((item) => item._id !== id));
+      
+      if (res.ok) {
+        toast.success("Deleted from favorites");
+        setFavorites((prev) => prev.filter((item) => item._id !== id));
+      }
     } catch (err) {
       console.log("Delete error:", err);
     }
@@ -51,18 +62,10 @@ toast.success("delete favorite")
             <Table.Column className="pr-0">
               <Checkbox slot="selection" aria-label="Select all" />
             </Table.Column>
-
-            {/* ✅ FIX HERE */}
-            <Table.Column isRowHeader id="id">
-              ID
-            </Table.Column>
-
+            <Table.Column isRowHeader id="id">ID</Table.Column>
+            <Table.Column id="title">Title</Table.Column> {/* 👈 আপনার রিকোয়েস্ট অনুযায়ী title কলাম */}
             <Table.Column id="name">Name</Table.Column>
-            <Table.Column id="email">Email</Table.Column>
-
-            <Table.Column className="text-end">
-              Actions
-            </Table.Column>
+            <Table.Column className="text-end">Actions</Table.Column>
           </Table.Header>
 
           {/* BODY */}
@@ -72,11 +75,9 @@ toast.success("delete favorite")
                 <Table.Cell className="pr-0">
                   <Checkbox slot="selection" />
                 </Table.Cell>
-
-                <Table.Cell>#{item._id}</Table.Cell>
+                <Table.Cell>#{item._id?.slice(-6)}</Table.Cell> {/* আইডি ছোট করে দেখানোর জন্য */}
+                <Table.Cell>{item.title}</Table.Cell> {/* 👈 ব্যাকএন্ডের title শো করবে */}
                 <Table.Cell>{item.name}</Table.Cell>
-                <Table.Cell>{item.email}</Table.Cell>
-
                 <Table.Cell>
                   <div className="flex justify-end">
                     <Button
@@ -85,7 +86,7 @@ toast.success("delete favorite")
                       variant="danger-soft"
                       onClick={() => handleDelete(item._id)}
                     >
-                      <Trash2Icon className="size-4" icon="lucide:trash" />
+                      <Trash2Icon className="size-4" />
                     </Button>
                   </div>
                 </Table.Cell>

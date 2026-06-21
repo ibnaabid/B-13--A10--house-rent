@@ -24,19 +24,22 @@ export default async function Success({ searchParams }) {
 
   if (status === "complete") {
     try {
-      // ১. বুকিং ইতিমধ্যে ডাটাবেজে আছে কি না চেক করা (ক্যামেলকেস ফিক্স করা হয়েছে)
+      // ১. বুকিং ইতিমধ্যে ডাটাবেজে আছে কি না চেক করা (ক্যামেলকেস ফিক্স করা )
       const checkRes = await fetch(
         `http://localhost:5000/Bookings/${session_id}`, 
         { cache: "no-store" }
       );
+      
+      console.log(checkRes,"check")
 
       if (!checkRes.ok) {
         throw new Error("Failed to check existing booking");
       }
 
-      const { exists } = await checkRes.json();
+      const {exists}  = await checkRes.json();
+      
 
-      if (!exists) {
+      if (exists) {
         const bookingData = {
           sessionId:     session_id,
           propertyId:    metadata?.propertyId,

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home, Building2, DollarSign, Calendar, PlusCircle } from "lucide-react";
+import { Home, Building2, DollarSign, Calendar, PlusCircle, User } from "lucide-react";
 
 export default function Sidebar() {
   return (
@@ -27,6 +27,10 @@ export default function Sidebar() {
 
         <Link href="/dashboard/owner/add-property" className="flex items-center gap-2 hover:text-blue-400">
           <PlusCircle size={18} /> Add Property
+        </Link>
+
+        <Link href="/dashboard/owner/profile" className="flex items-center gap-2 hover:text-blue-400">
+          <User size={18} /> Profile
         </Link>
 
       </nav>
