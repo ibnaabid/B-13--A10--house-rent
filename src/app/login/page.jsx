@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { authClient } from "@/app/lib/auth-client"; 
+import { authClient } from "@/app/lib/auth-client";
 import { Mail, Lock, Loader2, LogIn, Home } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
-  console.log(session)
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,17 +18,16 @@ export default function LoginPage() {
     if (isPending) return;
     if (!session?.user) return;
 
-    const userEmail = session?.user?.email;
-    const userPass = session?.user.password;
+    const userEmail = session.user.email;
+    const role = session.user.role;
 
-    if(userEmail === "mdibnaabid123@gmail.com" & userPass === "123456789"){
-      router.push("/dashboard/admin")
-    }
-    else{
-      redirect("/")
+    // Admin check — শুধু email দিয়ে
+    if (userEmail === "mdibnaabid123@gmail.com") {
+      router.push("/dashboard/admin");
+      return;
     }
 
-    const role = session?.user?.role;
+    // Role based routing
     if (role === "owner") {
       router.push("/dashboard/owner");
     } else if (role === "tenant") {
@@ -42,31 +40,29 @@ export default function LoginPage() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-const handleLogin = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
 
-  try {
-    const { error } = await authClient.signIn.email({
-      email: formData.email,
-      password: formData.password,
-    });
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const { error } = await authClient.signIn.email({
+        email: formData.email,
+        password: formData.password,
+      });
 
-    if (error) {
-      toast.error(error.message || "Login Failed");
+      if (error) {
+        toast.error(error.message || "Login Failed");
+        return;
+      }
+
+      toast.success("Login successful!");
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
       setIsSubmitting(false);
-      return;
     }
+  };
 
-    toast.success("Login successful!");
-
-    setIsSubmitting(false);
-
-  } catch (err) {
-    toast.error("Something went wrong");
-    setIsSubmitting(false);
-  }
-};
   const handleGoogleLogin = async () => {
     try {
       await authClient.signIn.social({
@@ -78,7 +74,6 @@ const handleLogin = async (e) => {
     }
   };
 
-
   if (isPending) {
     return (
       <div className="h-[70vh] flex items-center justify-center bg-slate-950">
@@ -88,22 +83,24 @@ const handleLogin = async (e) => {
   }
 
   return (
-    <div className="min-h-[calc(100-5rem)] flex items-center justify-center bg-slate-950 px-4 py-12 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4 py-12 relative overflow-hidden">
       {/* Background Glows */}
       <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="w-full max-w-md bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10">
-        
+
         {/* HEADER */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 mx-auto bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/30">
+          <div className="w-14 h-14 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/30">
             <Home className="text-white w-6 h-6" />
           </div>
           <h1 className="text-3xl font-black mt-4 tracking-tight text-white">
             Rent<span className="text-blue-500">Sphere</span>
           </h1>
-          <p className="text-slate-400 text-sm mt-1.5 font-medium">Welcome back! Please enter your details.</p>
+          <p className="text-slate-400 text-sm mt-1.5 font-medium">
+            Welcome back! Please enter your details.
+          </p>
         </div>
 
         {/* GOOGLE BUTTON */}
@@ -121,41 +118,46 @@ const handleLogin = async (e) => {
           <span className="text-sm font-bold">Continue with Google</span>
         </button>
 
+        {/* DIVIDER */}
         <div className="flex items-center my-5 text-slate-600">
-          <div className="flex-1 h-[1px] bg-slate-800"></div>
+          <div className="flex-1 h-[1px] bg-slate-800" />
           <span className="px-3 text-xs uppercase tracking-widest font-semibold text-slate-500">or</span>
-          <div className="flex-1 h-[1px] bg-slate-800"></div>
+          <div className="flex-1 h-[1px] bg-slate-800" />
         </div>
 
         {/* FORM */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="text-xs text-slate-400 font-medium mb-1 block">Email Address</label>
+            <label className="text-xs text-slate-400 font-medium mb-1.5 block">
+              Email Address
+            </label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3.5 text-slate-500" size={18} />
+              <Mail className="absolute left-3.5 top-3.5 text-slate-500" size={17} />
               <input
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="name@example.com"
-                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 focus:border-blue-500 outline-none rounded-xl text-sm transition-all text-white"
+                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 outline-none rounded-xl text-sm transition-all text-white placeholder-slate-600"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs text-slate-400 font-medium mb-1 block">Password</label>
+            <label className="text-xs text-slate-400 font-medium mb-1.5 block">
+              Password
+            </label>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-3.5 text-slate-500" size={18} />
+              <Lock className="absolute left-3.5 top-3.5 text-slate-500" size={17} />
               <input
                 name="password"
                 type="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 focus:border-blue-500 outline-none rounded-xl text-sm transition-all text-white"
+                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 outline-none rounded-xl text-sm transition-all text-white placeholder-slate-600"
                 required
               />
             </div>
@@ -164,16 +166,18 @@ const handleLogin = async (e) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/10 mt-6 flex items-center justify-center gap-2 text-sm"
+            className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-700/20 mt-2 flex items-center justify-center gap-2 text-sm"
           >
-            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn size={16} />}
-            {isSubmitting ? "Validating..." : "Sign In"}
+            {isSubmitting
+              ? <><Loader2 className="w-4 h-4 animate-spin" /> Signing in...</>
+              : <><LogIn size={15} /> Sign In</>
+            }
           </button>
         </form>
 
-        <p className="text-center text-slate-400 mt-6 text-sm">
-          Don’t have an account?{" "}
-          <Link href="/register" className="text-blue-400 hover:underline font-medium">
+        <p className="text-center text-slate-500 mt-6 text-sm">
+          Do not have an account?{" "}
+          <Link href="/register" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
             Create one
           </Link>
         </p>
