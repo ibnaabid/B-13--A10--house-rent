@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
   Building2,
@@ -22,6 +22,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
+  const router = useRouter()
 
   const { data: session, isPending } = authClient.useSession();
   console.log(session,"useSession")
@@ -48,6 +49,8 @@ export default function Navbar() {
     await authClient.signOut();
     setUserOpen(false);
     setMenuOpen(false);
+    router.refresh()
+
   };
 
   if (isPending) {

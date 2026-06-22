@@ -1,9 +1,11 @@
 "use client";
 
 import { HeartCrack } from "lucide-react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const DelteFav = ({ item }) => {
+  const router = useRouter()
   const dishandler = async () => {
     try {
       const res = await fetch(
@@ -18,6 +20,7 @@ const DelteFav = ({ item }) => {
 
       if (res.ok) {
         toast.success("Removed from favorites");
+        router.refresh()
       } else {
         toast.error("Failed to remove");
       }
