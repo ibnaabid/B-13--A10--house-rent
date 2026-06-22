@@ -22,7 +22,7 @@ export async function proxy(request) {
     return NextResponse.redirect(new URL("/login",request.url))
     }
 
-  if(!user ==="tenant"){
+  if(!user =="tenant"){
     return NextResponse.redirect(new URL("/login",request.url))
 
   }
@@ -31,7 +31,7 @@ export async function proxy(request) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if(!UserEmail === "mdibnaabid123@gmail.com" & !pass === "123456789"){
+  if(!UserEmail == "mdibnaabid123@gmail.com" & !pass == "123456789"){
  return NextResponse.redirect(new URL("/login", request.url))
   }
 

@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { authClient } from "@/app/lib/auth-client";
+// import { authClient } from "@/app/lib/auth-client";
 import { Mail, Lock, Loader2, LogIn, Home } from "lucide-react";
 import Link from "next/link";
+import { authClient } from "../lib/auth-client";
 
 export default function LoginPage() {
   const router = useRouter();
