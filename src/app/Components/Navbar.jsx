@@ -16,7 +16,7 @@ import {
   LogIn,
   UserPlus
 } from "lucide-react";
-import { authClient } from "@/app/lib/auth-client";
+import { authClient } from "../lib/auth-client";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -36,21 +36,44 @@ export default function Navbar() {
     { label: "Contact", href: "/contact", icon: Phone },
   ];
 
+ // ─── ১. অ্যাডমিনসহ সব রোল চেক করার জন্য আপডেট ───
   const getDashboardLink = () => {
-    if (!role) return null;
-    if (role === "owner" || role === "OWNER") return "/dashboard/owner";
-    if (role === "tenant" || role === "TENANT") return "/dashboard/tenant";
+    if (!session?.user) return null;
+    
+    // মেইন অ্যাডমিন ইমেইল চেক
+    if (session.user.email === "mdibnaabid123@gmail.com") {
+      return "/dashboard/admin";
+    }
+
+    const userRole = role?.toLowerCase();
+    if (userRole === "owner") return "/dashboard/owner";
+    if (userRole === "tenant") return "/dashboard/tenant";
     return null;
   };
 
   const dashboardLink = getDashboardLink();
 
   const logout = async () => {
-    await authClient.signOut();
-    setUserOpen(false);
-    setMenuOpen(false);
-    router.refresh()
-
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            setUserOpen(false);
+            setMenuOpen(false);
+            // সরাসরি হোমপেজে পুশ করে রিফ্রেশ দিন যাতে ওল্ড সেশন ক্যাশ ক্লিন হয়ে যায়
+            router.push("/login");
+            router.refresh();
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Sign out failed:", error);
+     
+      setUserOpen(false);
+      setMenuOpen(false);
+      router.push("/login");
+      router.refresh();
+    }
   };
 
   if (isPending) {
