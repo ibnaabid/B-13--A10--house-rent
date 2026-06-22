@@ -8,7 +8,6 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
 
-  // fetch users
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -26,24 +25,21 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  // role update
   const updateRole = async (id, role) => {
     try {
       setUpdatingId(id);
 
       const res = await fetch(`http://localhost:5000/user/${id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role }),
       });
 
       if (!res.ok) throw new Error();
 
-      toast.success("Role updated successfully");
+      toast.success("Role updated");
       fetchUsers();
-    } catch (err) {
+    } catch {
       toast.error("Failed to update role");
     } finally {
       setUpdatingId(null);
@@ -51,75 +47,81 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-xl p-6">
+    <div className="min-h-screen ml-20 flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
+      
+      <div className="w-full max-w-6xl">
         
-        {/* Header */}
-        <h1 className="text-2xl font-bold mb-6 text-gray-800">
-          👥 All Users
-        </h1>
+        {/* Glass Card */}
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-6">
+          
+          {/* Header */}
+          <h1 className="text-2xl font-bold text-white mb-6">
+            👥 Users Dashboard
+          </h1>
 
-        {/* Loading */}
-        {loading ? (
-          <p className="text-gray-500">Loading users...</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
+          {loading ? (
+            <p className="text-gray-300">Loading users...</p>
+          ) : (
+            <div className="overflow-x-auto">
               
-              {/* Head */}
-              <thead className="bg-gray-900 text-white">
-                <tr>
-                  <th className="p-3 text-left">Name</th>
-                  <th className="p-3 text-left">Email</th>
-                  <th className="p-3 text-left">Role</th>
-                  <th className="p-3 text-left">Change Role</th>
-                </tr>
-              </thead>
-
-              {/* Body */}
-              <tbody>
-                {users.map((user) => (
-                  <tr
-                    key={user._id}
-                    className="border-b hover:bg-gray-50 transition"
-                  >
-                    <td className="p-3">{user.name}</td>
-                    <td className="p-3">{user.email}</td>
-
-                    {/* current role */}
-                    <td className="p-3">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
-                        {user.role || "user"}
-                      </span>
-                    </td>
-
-                    {/* change role */}
-                    <td className="p-3 flex gap-2 items-center">
-                      <select
-                        className="border p-2 rounded"
-                        defaultValue={user.role || "user"}
-                        onChange={(e) =>
-                          updateRole(user._id, e.target.value)
-                        }
-                        disabled={updatingId === user._id}
-                      >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                        <option value="moderator">Moderator</option>
-                      </select>
-
-                      {updatingId === user._id && (
-                        <span className="text-sm text-gray-500">
-                          updating...
-                        </span>
-                      )}
-                    </td>
+              <table className="w-full text-white">
+                
+                {/* Head */}
+                <thead>
+                  <tr className="border-b border-white/20 text-left">
+                    <th className="p-3">Name</th>
+                    <th className="p-3">Email</th>
+                    <th className="p-3">Role</th>
+                    <th className="p-3">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+
+                {/* Body */}
+                <tbody>
+                  {users.map((user) => (
+                    <tr
+                      key={user._id}
+                      className="border-b border-white/10 hover:bg-white/10 transition"
+                    >
+                      <td className="p-3 font-medium">{user.name}</td>
+                      <td className="p-3 text-blue-200">{user.email}</td>
+
+                      {/* Role badge */}
+                      <td className="p-3">
+                        <span className="px-3 py-1 rounded-full text-xs bg-blue-500/10 border text-green-500 font-bold border-blue-400/30">
+                          {user.role || "user"}
+                        </span>
+                      </td>
+
+                      {/* Action */}
+                      <td className="p-3 flex items-center gap-3">
+                        <select
+                          className="bg-white/10 border border-white/20 text-white p-2 rounded-lg backdrop-blur-md focus:outline-none"
+                          defaultValue={user.role || "user"}
+                          onChange={(e) =>
+                            updateRole(user._id, e.target.value)
+                          }
+                          disabled={updatingId === user._id}
+                        >
+                          <option className="text-black" value="user">Tenant</option>
+                          <option className="text-black" value="admin">Admin</option>
+                          <option className="text-black" value="Owner">Owner</option>
+                        </select>
+
+                        {updatingId === user._id && (
+                          <span className="text-xs text-gray-300 animate-pulse">
+                            updating...
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
