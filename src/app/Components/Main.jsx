@@ -1,104 +1,232 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowRight, Phone, Home } from "lucide-react";
+import {
+  Search,
+  MapPin,
+  Home,
+  DollarSign,
+  SlidersHorizontal,
+} from "lucide-react";
 
-const Hero = () => {
-  // টেক্সট এবং বাটনের জন্য স্মুথ অ্যানিমেশন ভ্যারিয়েন্ট
-  const containerVariants = {
+const propertyTypes = [
+  "Any Type",
+  "Apartment",
+  "House",
+  "Villa",
+  "Studio",
+  "Office",
+];
+
+const Banner = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const [filters, setFilters] = useState({
+    location: "",
+    type: "Any Type",
+    minPrice: "",
+    maxPrice: "",
+  });
+
+  // ✅ SAFE SEARCH HANDLER
+  const handleSearch = () => {
+    setLoading(true);
+
+    const params = new URLSearchParams();
+
+    if (filters.location) params.set("location", filters.location);
+    if (filters.type !== "Any Type") params.set("type", filters.type);
+    if (filters.minPrice) params.set("minPrice", filters.minPrice);
+    if (filters.maxPrice) params.set("maxPrice", filters.maxPrice);
+
+    const query = params.toString();
+
+    router.push(query ? `/allproperties?${query}` : "/allproperties");
+
+    setTimeout(() => setLoading(false), 500);
+  };
+
+  const container = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2, // একটির পর আরেকটি এলিমেন্ট অ্যানিমেট হবে
-      },
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
     },
   };
 
-  const itemVariants = {
+  const fadeUp = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7 },
+    },
   };
 
   return (
-    <section 
-      className="relative min-h-[90vh] flex items-center justify-center bg-cover bg-center bg-no-repeat text-white"
-      style={{
-        backgroundImage: "url('/chris-orcutt-DmEX6_oQI-U-unsplash.jpg')",
-      }}
-    >
-      {/* Premium Dark Overlay (DaisyUI-এর মতো কিন্তু আরও রিচ লুকের জন্য Slate-900 মিক্সড) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/70 to-slate-950/90 backdrop-blur-[2px]"></div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#050810]">
 
-      {/* Hero Content Area */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="space-y-6"
-        >
-          {/* স্মল গ্লোয়িং ব্যাজ */}
-          <motion.div variants={itemVariants} className="inline-block">
-            <span className="px-4 py-1.5 bg-blue-500/10 text-blue-400 text-xs font-bold tracking-wider uppercase rounded-full border border-blue-500/30 backdrop-blur-md">
-              ✨ Welcome to HouseRent Marketplace 
-            </span>
-          </motion.div>
+      {/* BACKGROUND */}
+      <div
+        className="absolute inset-0 bg-cover bg-center scale-105"
+        style={{
+          backgroundImage:
+            "url('/chris-orcutt-DmEX6_oQI-U-unsplash.jpg')",
+        }}
+      />
 
-          {/* মেইন প্রিমিয়াম ক্যাচি হেডলাইন */}
-          <motion.h1 
-            variants={itemVariants}
-            className="text-4xl sm:text-6xl font-black tracking-tight leading-tight"
-          >
-            Find Your Perfect <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">Rental Home</span> Easily
-          </motion.h1>
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/60" />
 
-          {/* ডেসক্রিপশন সাবটেক্সট */}
-          <motion.p 
-            variants={itemVariants}
-            className="max-w-2xl mx-auto text-base sm:text-xl text-slate-300 font-light leading-relaxed"
-          >
-            Discover premium apartments, houses, and villas for rent in your dream locations. 
-            Fast booking, verified owners, and secure payment systems.
-          </motion.p>
+      {/* CONTENT */}
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center space-y-6"
+      >
 
-          {/* ইন্টারঅ্যাক্টিভ কল-টু-অ্যাকশন বাটন গ্রুপ */}
-          <motion.div 
-            variants={itemVariants}
-            className="pt-4 flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/allproperties"
-                className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-blue-600/30 flex items-center gap-2 group text-sm sm:text-base"
-              >
-                <Home size={18} /> Browse Homes 
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/contact"
-                className="px-8 py-4 bg-slate-900/60 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold rounded-2xl transition-all backdrop-blur-md flex items-center gap-2 text-sm sm:text-base"
-              >
-                <Phone size={18} className="text-blue-400" /> Contact Us
-              </Link>
-            </motion.div>
-          </motion.div>
-
+        {/* BADGE */}
+        <motion.div variants={fadeUp}>
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 text-blue-400 text-xs font-bold rounded-full border border-blue-500/30">
+            <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+            #1 Rental Marketplace
+          </span>
         </motion.div>
-      </div>
 
-      {/* নিচের দিকে স্ক্রোল করার গাইড ইফেক্ট */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-slate-500 animate-bounce hidden sm:block">
-        <div className="w-6 h-10 border-2 border-slate-700 rounded-full flex justify-center p-1">
-          <div className="w-1.5 h-2 bg-blue-500 rounded-full"></div>
+        {/* TITLE */}
+        <motion.h1
+          variants={fadeUp}
+          className="text-4xl sm:text-6xl font-black text-white"
+        >
+          Find Your{" "}
+          <span className="text-blue-400">Dream Home</span>
+        </motion.h1>
+
+        {/* DESCRIPTION */}
+        <motion.p
+          variants={fadeUp}
+          className="text-slate-400 max-w-2xl mx-auto"
+        >
+          Browse thousands of verified rental properties in Bangladesh.
+        </motion.p>
+
+        {/* SEARCH BOX */}
+        <motion.form
+          variants={fadeUp}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+          className="bg-slate-900/70 backdrop-blur-xl border border-slate-700 rounded-2xl p-4 space-y-3"
+        >
+
+          {/* GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+
+            {/* LOCATION */}
+            <div className="relative">
+              <MapPin className="absolute left-3 top-3 text-slate-500" size={16} />
+              <input
+                type="text"
+                placeholder="Location"
+                value={filters.location}
+                onChange={(e) =>
+                  setFilters({ ...filters, location: e.target.value })
+                }
+                className="w-full pl-10 py-3 bg-slate-800 text-white rounded-xl outline-none"
+              />
+            </div>
+
+            {/* TYPE */}
+            <div className="relative">
+              <Home className="absolute left-3 top-3 text-slate-500" size={16} />
+              <select
+                value={filters.type}
+                onChange={(e) =>
+                  setFilters({ ...filters, type: e.target.value })
+                }
+                className="w-full pl-10 py-3 bg-slate-800 text-white rounded-xl outline-none"
+              >
+                {propertyTypes.map((t) => (
+                  <option key={t}>{t}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* MIN PRICE */}
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-3 text-slate-500" size={16} />
+              <input
+                type="number"
+                placeholder="Min Price"
+                value={filters.minPrice}
+                onChange={(e) =>
+                  setFilters({ ...filters, minPrice: e.target.value })
+                }
+                className="w-full pl-10 py-3 bg-slate-800 text-white rounded-xl outline-none"
+              />
+            </div>
+
+            {/* MAX PRICE */}
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-3 text-emerald-400" size={16} />
+              <input
+                type="number"
+                placeholder="Max Price"
+                value={filters.maxPrice}
+                onChange={(e) =>
+                  setFilters({ ...filters, maxPrice: e.target.value })
+                }
+                className="w-full pl-10 py-3 bg-slate-800 text-white rounded-xl outline-none"
+              />
+            </div>
+
+          </div>
+
+          {/* BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            <Search size={16} />
+            {loading ? "Searching..." : "Search Properties"}
+          </button>
+
+        </motion.form>
+
+        {/* QUICK TAGS */}
+        <div className="flex flex-wrap justify-center gap-2">
+          {["Dhaka", "Chittagong", "Sylhet", "Apartment", "Villa"].map(
+            (tag) => (
+              <button
+                key={tag}
+                onClick={() => {
+                  const isCity = ["Dhaka", "Chittagong", "Sylhet"].includes(
+                    tag
+                  );
+
+                  setFilters((prev) => ({
+                    ...prev,
+                    location: isCity ? tag : prev.location,
+                    type: !isCity ? tag : prev.type,
+                  }));
+                }}
+                className="px-3 py-1 text-xs bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700"
+              >
+                {tag}
+              </button>
+            )
+          )}
         </div>
-      </div>
+
+      </motion.div>
     </section>
   );
 };
 
-export default Hero;
+export default Banner;
