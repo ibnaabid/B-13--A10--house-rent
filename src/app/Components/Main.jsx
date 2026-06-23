@@ -31,8 +31,7 @@ const Banner = () => {
     maxPrice: "",
   });
 
-  // ✅ SAFE SEARCH HANDLER
-  const handleSearch = () => {
+ const handleSearch = () => {
     setLoading(true);
 
     const params = new URLSearchParams();
@@ -43,7 +42,6 @@ const Banner = () => {
     if (filters.maxPrice) params.set("maxPrice", filters.maxPrice);
 
     const query = params.toString();
-
     router.push(query ? `/allproperties?${query}` : "/allproperties");
 
     setTimeout(() => setLoading(false), 500);
