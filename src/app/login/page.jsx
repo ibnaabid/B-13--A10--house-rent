@@ -23,7 +23,7 @@ export default function LoginPage() {
     const role = session.user.role;
 
     // Admin check — শুধু email দিয়ে
-    if (userEmail === "mdibnaabid123@gmail.com") {
+    if (role === "admin") {
       router.push("/dashboard/admin");
       return;
     }

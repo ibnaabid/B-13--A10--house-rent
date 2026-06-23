@@ -33,7 +33,7 @@ const Page = async () => {
               {bookings
                 .reduce(
                   (total, item) =>
-                    total + Number(item.price || item.amount || 0),
+                    total + Number(item.bookingAmount || item.amount || 0),
                   0
                 )
                 .toLocaleString()}

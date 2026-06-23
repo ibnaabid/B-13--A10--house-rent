@@ -1,78 +1,138 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import {
+  Modal,
+  Button,
+  Input,
+  Label,
+  TextField,
+  Surface,
+} from "@heroui/react";
+import { Pencil } from "lucide-react";
 
-export default function EditHome({ home, close, refresh }) {
-  const [form, setForm] = useState({
-    title: home.title,
-    location: home.location,
-    price: home.price,
+export default function EditModal({ home, isOpen, onClose, onSuccess }) {
+  const [formData, setFormData] = useState({
+    title: "",
+    location: "",
+    price: "",
   });
 
-  const handleUpdate = async () => {
-    const res = await fetch(
-      `http://localhost:5000/allhome/${home._id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      }
-    );
+  const [loading, setLoading] = useState(false);
 
-    if (res.ok) {
-      toast.success("Updated successfully");
-      refresh();
-      close();
-    } else {
-      toast.error("Update failed");
+  // যখন modal open হবে তখন data set হবে
+  useEffect(() => {
+    if (home) {
+      setFormData({
+        title: home.title || "",
+        location: home.location || "",
+        price: home.price || "",
+      });
+    }
+  }, [home]);
+
+  const handleEdit = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`http://localhost:5000/allhome/${home._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        toast.success("Property updated");
+        onSuccess();
+        onClose();
+      } else {
+        toast.error("Update failed");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-xl w-[400px] space-y-3">
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal.Backdrop />
 
-        <h2 className="text-xl font-bold">Edit Property</h2>
+      <Modal.Container placement="center">
+        <Modal.Dialog className="sm:max-w-md">
 
-        <input
-          value={form.title}
-          onChange={(e) =>
-            setForm({ ...form, title: e.target.value })
-          }
-          className="border p-2 w-full"
-        />
+          {/* Close button */}
+          <Modal.CloseTrigger />
 
-        <input
-          value={form.location}
-          onChange={(e) =>
-            setForm({ ...form, location: e.target.value })
-          }
-          className="border p-2 w-full"
-        />
+          {/* Header */}
+          <Modal.Header>
+            <div className="flex items-center gap-2">
+              <Pencil size={18} className="text-primary" />
+              <h2 className="text-lg font-semibold">Edit Property</h2>
+            </div>
 
-        <input
-          value={form.price}
-          onChange={(e) =>
-            setForm({ ...form, price: e.target.value })
-          }
-          className="border p-2 w-full"
-        />
+            <p className="text-sm text-muted mt-1">
+              Property information update করুন
+            </p>
+          </Modal.Header>
 
-        <div className="flex justify-end gap-2">
-          <button onClick={close}>Cancel</button>
+          {/* Body */}
+          <Modal.Body className="p-6">
+            <Surface variant="default">
+              <div className="flex flex-col gap-4">
 
-          <button
-            onClick={handleUpdate}
-            className="bg-blue-500 text-white px-3 py-1 rounded"
-          >
-            Update
-          </button>
-        </div>
+                <TextField name="title" variant="secondary">
+                  <Label>Title</Label>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                    placeholder="Enter title"
+                  />
+                </TextField>
 
-      </div>
-    </div>
+                <TextField name="location" variant="secondary">
+                  <Label>Location</Label>
+                  <Input
+                    value={formData.location}
+                    onChange={(e) =>
+                      setFormData({ ...formData, location: e.target.value })
+                    }
+                    placeholder="Enter location"
+                  />
+                </TextField>
+
+                <TextField name="price" variant="secondary">
+                  <Label>Price</Label>
+                  <Input
+                    type="number"
+                    value={formData.price}
+                    onChange={(e) =>
+                      setFormData({ ...formData, price: e.target.value })
+                    }
+                    placeholder="Enter price"
+                  />
+                </TextField>
+
+              </div>
+            </Surface>
+          </Modal.Body>
+
+          {/* Footer */}
+          <Modal.Footer>
+            <Button variant="secondary" onPress={onClose}>
+              Cancel
+            </Button>
+
+            <Button onPress={handleEdit} isLoading={loading}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+
+        </Modal.Dialog>
+      </Modal.Container>
+    </Modal>
   );
 }

@@ -3,33 +3,45 @@
 import { CheckCircle, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import RejectModal from "./RejectModal";
+// import RejectModal from "./RejectModal";
 
 const StatusUpdate = ({ home }) => {
-    const router = useRouter()
-    console.log("home",home)
+  const router = useRouter();
 
+  const [isRejectOpen, setIsRejectOpen] = useState(false);
+
+  // ACCEPT (direct)
   const updateStatus = async (status) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/allhome/${home._id}`,
+        `http://localhost:5000/allhome/${home?._id}`,
         {
           method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status }),
         }
       );
 
       if (res.ok) {
         toast.success(`Property ${status}`);
-router.refresh()
+        router.refresh();
       } else {
         toast.error("Update failed");
       }
     } catch (error) {
       toast.error("Something went wrong");
     }
+  };
+
+  // open reject modal
+  const handleRejectClick = () => {
+    setIsRejectOpen(true);
+  };
+
+  const closeRejectModal = () => {
+    setIsRejectOpen(false);
   };
 
   return (
@@ -43,14 +55,26 @@ router.refresh()
         <CheckCircle size={16} />
       </button>
 
-      {/* REJECT */}
+      {/* REJECT (opens modal) */}
       <button
-        onClick={() => updateStatus("rejected")}
+        onClick={handleRejectClick}
         className="p-2 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500/20"
       >
         <XCircle size={16} />
       </button>
 
+      {/* REJECT MODAL */}
+      {isRejectOpen && (
+        <RejectModal
+          home={home}
+          isOpen={isRejectOpen}
+          onClose={closeRejectModal}
+          onSuccess={() => {
+            closeRejectModal();
+            router.refresh();
+          }}
+        />
+      )}
     </div>
   );
 };

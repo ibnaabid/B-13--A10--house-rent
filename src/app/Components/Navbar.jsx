@@ -41,13 +41,14 @@ export default function Navbar() {
     if (!session?.user) return null;
     
     // মেইন অ্যাডমিন ইমেইল চেক
-    if (session.user.email === "mdibnaabid123@gmail.com") {
+    if (session.user.email === "mdabout2@gmail.com") {
       return "/dashboard/admin";
     }
 
     const userRole = role?.toLowerCase();
     if (userRole === "owner") return "/dashboard/owner";
     if (userRole === "tenant") return "/dashboard/tenant";
+    if(userRole === "admin") return "/dashboard/admin"
     return null;
   };
 

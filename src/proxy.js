@@ -12,17 +12,21 @@ export async function proxy(request) {
     headers: await headers(),
   });
 
-  const UserEmail =session?.user?.email;
-  const pass = session?.user?.password
+  // const UserEmail =session?.user?.email;
+  // const pass = session?.user?.password
 
-  const user = session?.user?.role;
+  const userRole = session?.user?.role;
   
     if (!session?.user) {
   
     return NextResponse.redirect(new URL("/login",request.url))
     }
 
-  if(!user =="tenant"){
+  if(!userRole =="tenant"){
+    return NextResponse.redirect(new URL("/login",request.url))
+
+  }
+   if(!userRole =="admin"){
     return NextResponse.redirect(new URL("/login",request.url))
 
   }
@@ -31,9 +35,7 @@ export async function proxy(request) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if(!UserEmail == "mdibnaabid123@gmail.com" & !pass == "123456789"){
- return NextResponse.redirect(new URL("/login", request.url))
-  }
+ 
 
   return NextResponse.next();
 }
