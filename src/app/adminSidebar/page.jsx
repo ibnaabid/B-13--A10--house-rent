@@ -9,6 +9,7 @@ import {
   BookOpen,
   CreditCard,
   LogOut,
+  User,
 } from "lucide-react";
 import { authClient } from "@/app/lib/auth-client"; // আপনার Better Auth ক্লায়েন্ট পাথ
 
@@ -28,7 +29,7 @@ export default function AdminSidebar() {
     },
     {
       name: "All Properties",
-      href: "/dashboard/admin/properties",
+      href: "/dashboard/admin/houseProperties",
       icon: Building2,
     },
     {
@@ -40,6 +41,11 @@ export default function AdminSidebar() {
       name: "Transactions",
       href: "/dashboard/admin/transactions",
       icon: CreditCard,
+    },
+    {
+      name: "Profile",
+      href: "/dashboard/admin/Profile",
+      icon: User,
     },
   ];
 

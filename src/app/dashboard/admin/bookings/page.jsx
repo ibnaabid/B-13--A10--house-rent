@@ -17,98 +17,106 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="min-h-screen ml-20 bg-[#0f172a] p-8">
+    // ml-20 রিমুভ করে p-4 sm:p-8 ব্যবহার করা হয়েছে
+    <div className="min-h-screen w-full bg-[#0f172a] p-4 sm:p-8 antialiased">
 
-      {/* Top Stats */}
-      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6 mb-8">
+      {/* Top Stats - মোবাইলে ১টি, ট্যাবলেটে ২টি এবং ডেক্সটপে ৩টি কলামে দেখাবে */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
 
-        <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-6 rounded-3xl shadow-2xl text-white">
-          <h2 className="text-sm opacity-80">Total Bookings</h2>
-          <h1 className="text-4xl font-bold mt-2">
+        <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-5 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl text-white">
+          <h2 className="text-xs sm:text-sm opacity-80">Total Bookings</h2>
+          <h1 className="text-3xl sm:text-4xl font-bold mt-1 sm:mt-2">
             {bookings.length}
           </h1>
         </div>
 
-        <div className="bg-gradient-to-r from-emerald-500 to-green-600 p-6 rounded-3xl shadow-2xl text-white">
-          <h2 className="text-sm opacity-80">Approved</h2>
-          <h1 className="text-4xl font-bold mt-2">
+        <div className="bg-gradient-to-r from-emerald-500 to-green-600 p-5 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl text-white">
+          <h2 className="text-xs sm:text-sm opacity-80">Approved</h2>
+          <h1 className="text-3xl sm:text-4xl font-bold mt-1 sm:mt-2">
             {bookings.filter((b) => b.status === "Approved").length}
           </h1>
         </div>
 
-        <div className="bg-gradient-to-r from-rose-500 to-red-600 p-6 rounded-3xl shadow-2xl text-white">
-          <h2 className="text-sm opacity-80">Rejected</h2>
-          <h1 className="text-4xl font-bold mt-2">
+        {/* sm:max-md স্ক্রিনে ৩ নম্বর কার্ডটি দেখতে যেন অদ্ভুত না লাগে তাই sm:col-span-2 বা ৩টি করা যায়, এখানে গ্রিড স্বয়ংক্রিয় অ্যাডজাস্ট হবে */}
+        <div className="bg-gradient-to-r from-rose-500 to-red-600 p-5 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl text-white sm:col-span-2 lg:col-span-1">
+          <h2 className="text-xs sm:text-sm opacity-80">Rejected</h2>
+          <h1 className="text-3xl sm:text-4xl font-bold mt-1 sm:mt-2">
             {bookings.filter((b) => b.status === "Rejected").length}
           </h1>
         </div>
       </div>
 
-      {/* Main Table */}
-      <div className="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-[30px] overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
+      {/* Main Table Container */}
+      <div className="max-w-7xl mx-auto bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-[30px] overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
 
         {/* Header */}
-        <div className="flex justify-between items-center px-8 py-6 border-b border-white/10">
+        <div className="flex justify-between items-center px-4 sm:px-8 py-5 sm:py-6 border-b border-white/10">
           <div>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-xl sm:text-3xl font-bold text-white">
               Booking Requests
             </h1>
-            <p className="text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
               Manage all tenant bookings
             </p>
           </div>
-
-         
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        {/* Responsive Table Wrapper */}
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left whitespace-nowrap min-w-[700px]">
 
             <thead>
-              <tr className="bg-white/5 text-slate-300">
-                <th className="px-8 py-5 text-left">Tenant</th>
-                <th className="px-8 py-5 text-left">Property</th>
-                <th className="px-8 py-5 text-left">Amount</th>
-                <th className="px-8 py-5 text-left">Status</th>
-                <th className="px-8 py-5 text-center">Action</th>
+              <tr className="bg-white/5 text-slate-300 text-xs sm:text-sm uppercase tracking-wider">
+                <th className="px-4 sm:px-8 py-4 sm:py-5">Tenant</th>
+                <th className="px-4 sm:px-8 py-4 sm:py-5">Property</th>
+                <th className="px-4 sm:px-8 py-4 sm:py-5">Amount</th>
+                <th className="px-4 sm:px-8 py-4 sm:py-5">Status</th>
+                <th className="px-4 sm:px-8 py-4 sm:py-5 text-center">Action</th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody className="text-sm sm:text-base">
               {bookings.map((booking) => (
                 <tr
                   key={booking._id}
                   className="border-t border-white/5 hover:bg-white/5 transition duration-300"
                 >
-                  <td className="px-8 py-5">
-                    <div>
-                      <h3 className="font-semibold text-white">
+                  {/* Tenant */}
+                  <td className="px-4 sm:px-8 py-4 sm:py-5">
+                    <div className="max-w-[160px] sm:max-w-xs">
+                      <h3 className="font-semibold text-white text-xs sm:text-sm truncate">
                         {booking.tenantName}
                       </h3>
-                      <p className="text-sm text-slate-400">
+                      <p className="text-xs text-slate-400 truncate">
                         {booking.tenantEmail}
                       </p>
                     </div>
                   </td>
 
-                  <td className="px-8 py-5">
-                    <h3 className="font-medium text-white">
-                      {booking.propertyTitle}
-                    </h3>
-                    <p className="text-sm text-slate-400">
-                      {booking.propertyLocation}
-                    </p>
+                  {/* Property */}
+                  <td className="px-4 sm:px-8 py-4 sm:py-5">
+                    <div className="max-w-[180px] sm:max-w-xs">
+                      <h3 className="font-medium text-white text-xs sm:text-sm truncate">
+                        {booking.propertyTitle}
+                      </h3>
+                      <p className="text-xs text-slate-400 truncate">
+                        {booking.propertyLocation}
+                      </p>
+                    </div>
                   </td>
 
-                  <td className="px-8 py-5">
-                    <span className="font-bold text-emerald-400 text-lg">
-                      ৳ {booking.bookingAmount}
+                  {/* Amount */}
+                  <td className="px-4 sm:px-8 py-4 sm:py-5">
+                    <span className="font-bold text-emerald-400 text-sm sm:text-lg">
+                      ৳ {booking.bookingAmount?.toLocaleString()}
                     </span>
                   </td>
 
-                  <td className="px-8 py-5">
+                  {/* Status */}
+                  <td className="px-4 sm:px-8 py-4 sm:py-5">
                     <span
-                      className={`px-4 py-2 rounded-full text-xs font-bold ${
+                      className={`inline-block px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold tracking-wide
+                      ${
                         booking.status === "Approved"
                           ? "bg-green-500/20 text-green-400"
                           : booking.status === "Rejected"
@@ -120,11 +128,13 @@ export default function Page() {
                     </span>
                   </td>
 
-                  <td className="px-8 py-5 text-center">
-                   <Link href={"/dashboard/owner/bookings"}>
-                    <button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:scale-105 transition px-5 py-2 rounded-xl text-white font-medium">
-                      View
-                    </button></Link>
+                  {/* Action */}
+                  <td className="px-4 sm:px-8 py-4 sm:py-5 text-center">
+                    <Link href={"/dashboard/owner/bookings"}>
+                      <button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:scale-105 active:scale-95 transition-all px-4 sm:px-5 py-1.5 sm:py-2 rounded-xl text-white text-xs sm:text-sm font-medium shadow-md">
+                        View
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               ))}

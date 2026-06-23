@@ -47,72 +47,80 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="min-h-screen ml-20 flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
+    // ml-20 সরিয়ে w-full এবং ডাইনামিক প্যাডিং দেওয়া হয়েছে
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-3 sm:p-6">
       
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-6xl mx-auto">
         
         {/* Glass Card */}
-        <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-6">
+        <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-xl sm:rounded-2xl p-4 sm:p-6">
           
           {/* Header */}
-          <h1 className="text-2xl font-bold text-white mb-6">
-            👥 Users Dashboard
+          <h1 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2">
+            <span>👥</span> Users Dashboard
           </h1>
 
           {loading ? (
-            <p className="text-gray-300">Loading users...</p>
+            <p className="text-gray-300 text-sm sm:text-base animate-pulse">Loading users...</p>
           ) : (
-            <div className="overflow-x-auto">
+            // টেবিল স্ক্রিনের বাইরে যেন না যায় তাই নিখুঁত স্ক্রল কন্টেইনার
+            <div className="overflow-x-auto w-full max-w-full rounded-xl border border-white/5 custom-scrollbar">
               
-              <table className="w-full text-white">
+              <table className="w-full text-white text-left whitespace-nowrap min-w-[600px]">
                 
                 {/* Head */}
                 <thead>
-                  <tr className="border-b border-white/20 text-left">
-                    <th className="p-3">Name</th>
-                    <th className="p-3">Email</th>
-                    <th className="p-3">Role</th>
-                    <th className="p-3">Action</th>
+                  <tr className="border-b border-white/20 text-xs sm:text-sm uppercase tracking-wider bg-white/5">
+                    <th className="p-3 sm:p-4 font-semibold">Name</th>
+                    <th className="p-3 sm:p-4 font-semibold">Email</th>
+                    <th className="p-3 sm:p-4 font-semibold">Role</th>
+                    <th className="p-3 sm:p-4 font-semibold">Action</th>
                   </tr>
                 </thead>
 
                 {/* Body */}
-                <tbody>
+                <tbody className="text-sm sm:text-base">
                   {users.map((user) => (
                     <tr
                       key={user._id}
-                      className="border-b border-white/10 hover:bg-white/10 transition"
+                      className="border-b border-white/10 hover:bg-white/5 transition"
                     >
-                      <td className="p-3 font-medium">{user.name}</td>
-                      <td className="p-3 text-blue-200">{user.email}</td>
+                      <td className="p-3 sm:p-4 font-medium max-w-[150px] truncate">
+                        {user.name}
+                      </td>
+                      <td className="p-3 sm:p-4 text-blue-200/90 max-w-[200px] truncate">
+                        {user.email}
+                      </td>
 
                       {/* Role badge */}
-                      <td className="p-3">
-                        <span className="px-3 py-1 rounded-full text-xs bg-blue-500/10 border text-green-500 font-bold border-blue-400/30">
+                      <td className="p-3 sm:p-4">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs bg-blue-500/10 border text-emerald-400 font-bold border-blue-400/20">
                           {user.role || "user"}
                         </span>
                       </td>
 
                       {/* Action */}
-                      <td className="p-3 flex items-center gap-3">
-                        <select
-                          className="bg-white/10 border border-white/20 text-white p-2 rounded-lg backdrop-blur-md focus:outline-none"
-                          defaultValue={user.role || "user"}
-                          onChange={(e) =>
-                            updateRole(user._id, e.target.value)
-                          }
-                          disabled={updatingId === user._id}
-                        >
-                          <option className="text-black" value="user">Tenant</option>
-                          <option className="text-black" value="admin">Admin</option>
-                          <option className="text-black" value="Owner">Owner</option>
-                        </select>
+                      <td className="p-3 sm:p-4">
+                        <div className="flex items-center gap-2">
+                          <select
+                            className="bg-slate-800/80 border border-white/20 text-white text-xs sm:text-sm p-1.5 sm:p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
+                            defaultValue={user.role || "user"}
+                            onChange={(e) =>
+                              updateRole(user._id, e.target.value)
+                            }
+                            disabled={updatingId === user._id}
+                          >
+                            <option className="bg-slate-900 text-white" value="user">Tenant</option>
+                            <option className="bg-slate-900 text-white" value="admin">Admin</option>
+                            <option className="bg-slate-900 text-white" value="Owner">Owner</option>
+                          </select>
 
-                        {updatingId === user._id && (
-                          <span className="text-xs text-gray-300 animate-pulse">
-                            updating...
-                          </span>
-                        )}
+                          {updatingId === user._id && (
+                            <span className="text-[10px] sm:text-xs text-gray-400 animate-pulse shrink-0">
+                              updating...
+                            </span>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

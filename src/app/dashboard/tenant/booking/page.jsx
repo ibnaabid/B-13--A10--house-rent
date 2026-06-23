@@ -1,168 +1,157 @@
-const page = async () => {
-  const res = await fetch("http://localhost:5000/Bookings", {
-    cache: "no-store",
+"use client";
+
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Calendar, DollarSign, User, Mail, Home, MapPin } from "lucide-react";
+
+export default function BookPropertyPage({ property }) {
+  // ডামি ডাটা (যদি প্রোপার্টি প্রপ্স হিসেবে না আসে)
+  const currentProperty = property || {
+    _id: "prop_123456",
+    title: "Luxury Sky Apartment",
+    location: "Gulshan-2, Dhaka",
+    price: 25000,
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    tenantName: "",
+    tenantEmail: "",
+    bookingDate: "",
   });
 
-  const data = await res.json();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleBooking = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const bookingDetails = {
+      propertyId: currentProperty._id,
+      propertyTitle: currentProperty.title,
+      propertyLocation: currentProperty.location,
+      bookingAmount: currentProperty.price,
+      ...formData,
+      status: "Pending", // ডিফল্ট স্ট্যাটাস
+    };
+
+    try {
+      const res = await fetch("http://localhost:5000/Bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingDetails),
+      });
+
+      if (res.ok) {
+        toast.success("Booking request sent successfully!");
+        setFormData({ tenantName: "", tenantEmail: "", bookingDate: "" });
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      toast.error("Failed to submit booking request");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-slate-950 p-6">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-white">
-          Booking Management
-        </h1>
-        <p className="text-slate-400 mt-2">
-          Monitor and manage all booking activities.
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-          <h3 className="text-slate-400 text-sm">Total Bookings</h3>
-          <p className="text-4xl font-black text-white mt-2">
-            {data.length}
+    <div className="min-h-screen w-full bg-[#0f172a] p-4 sm:p-8 flex items-center justify-center antialiased">
+      <div className="max-w-md w-full bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl">
+        
+        {/* Header */}
+        <div className="mb-6 text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Book Property
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Confirm your interest by submitting a request
           </p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-          <h3 className="text-slate-400 text-sm">Confirmed</h3>
-          <p className="text-4xl font-black text-emerald-400 mt-2">
-            {
-              data.filter(
-                (item) =>
-                  item.bookingStatus?.toLowerCase() === "confirmed"
-              ).length
-            }
-          </p>
+        {/* Property Mini Summary Card */}
+        <div className="bg-slate-800/40 border border-slate-800 p-4 rounded-xl mb-6 space-y-2">
+          <div className="flex items-start gap-2.5">
+            <Home className="text-blue-400 shrink-0 w-5 h-5 mt-0.5" />
+            <h3 className="text-white text-sm sm:text-base font-semibold truncate">
+              {currentProperty.title}
+            </h3>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <MapPin className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">{currentProperty.location}</span>
+          </div>
+          <div className="flex items-center gap-1 text-emerald-400 font-bold text-base pt-1">
+            <DollarSign className="w-4 h-4" />
+            <span>{currentProperty.price?.toLocaleString()} / month</span>
+          </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-          <h3 className="text-slate-400 text-sm">Revenue</h3>
-          <p className="text-4xl font-black text-amber-400 mt-2">
-            $
-            {data.reduce(
-              (total, item) =>
-                total + Number(item.bookingAmount || 0),
-              0
-            )}
-          </p>
-        </div>
-      </div>
+        {/* Form */}
+        <form onSubmit={handleBooking} className="space-y-4 text-sm">
+          
+          {/* Name input */}
+          <div className="space-y-1.5">
+            <label className="text-slate-300 font-medium text-xs">Full Name</label>
+            <div className="relative">
+              <User className="absolute  mt-5 left-3 top-1.5/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
+              <input
+                type="text"
+                name="tenantName"
+                required
+                value={formData.tenantName}
+                onChange={handleChange}
+                placeholder="John Doe"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition-colors"
+              />
+            </div>
+          </div>
 
-      {/* Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-        <div className="px-6 py-5 border-b border-slate-800">
-          <h2 className="text-xl font-bold text-white">
-            All Bookings
-          </h2>
-        </div>
+          {/* Email input */}
+          <div className="space-y-1.5">
+            <label className="text-slate-300 font-medium text-xs">Email Address</label>
+            <div className="relative">
+              <Mail className="absolute mt-5 left-3 top-1.5/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
+              <input
+                type="email"
+                name="tenantEmail"
+                required
+                value={formData.tenantEmail}
+                onChange={handleChange}
+                placeholder="john@example.com"
+                className="w-full  bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 transition-colors"
+              />
+            </div>
+          </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-slate-800/50">
-                <th className="text-left px-6 py-4 text-slate-300 font-semibold">
-                  Property
-                </th>
+          {/* Date input */}
+          <div className="space-y-1.5">
+            <label className="text-slate-300 font-medium text-xs">Desired Move-in Date</label>
+            <div className="relative">
+              <Calendar className="absolute mt-5 left-3 top-1.5/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
+              <input
+                type="date"
+                name="bookingDate"
+                required
+                value={formData.bookingDate}
+                onChange={handleChange}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-white focus:outline-none focus:border-blue-500 transition-colors [color-scheme:dark]"
+              />
+            </div>
+          </div>
 
-                <th className="text-left px-6 py-4 text-slate-300 font-semibold">
-                  Tenant
-                </th>
-
-                <th className="text-left px-6 py-4 text-slate-300 font-semibold">
-                  Move In
-                </th>
-
-                <th className="text-left px-6 py-4 text-slate-300 font-semibold">
-                  Amount
-                </th>
-
-                <th className="text-left px-6 py-4 text-slate-300 font-semibold">
-                  Payment
-                </th>
-
-                <th className="text-left px-6 py-4 text-slate-300 font-semibold">
-                  Status
-                </th>
-
-                <th className="text-left px-6 py-4 text-slate-300 font-semibold">
-                  Date
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {data.map((booking) => (
-                <tr
-                  key={booking._id}
-                  className="border-t border-slate-800 hover:bg-slate-800/40 transition"
-                >
-                  <td className="px-6 py-5">
-                    <div>
-                      <p className="font-semibold text-white">
-                        {booking.propertyTitle}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {booking.propertyId}
-                      </p>
-                    </div>
-                  </td>
-
-                  <td className="px-6 py-5 text-slate-300">
-                    {booking.tenantEmail}
-                  </td>
-
-                  <td className="px-6 py-5 text-slate-300">
-                    {booking.moveInDate || "N/A"}
-                  </td>
-
-                  <td className="px-6 py-5">
-                    <span className="font-bold text-amber-400">
-                      ${booking.bookingAmount}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-5">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        booking.paymentStatus === "Paid"
-                          ? "bg-emerald-500/20 text-emerald-400"
-                          : "bg-yellow-500/20 text-yellow-400"
-                      }`}
-                    >
-                      {booking.paymentStatus}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-5">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        booking.bookingStatus === "Confirmed"
-                          ? "bg-blue-500/20 text-blue-400"
-                          : "bg-red-500/20 text-red-400"
-                      }`}
-                    >
-                      {booking.bookingStatus}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-5 text-slate-400">
-                    {booking.createdAt
-                      ? new Date(
-                          booking.createdAt
-                        ).toLocaleDateString()
-                      : "N/A"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:scale-[1.02] active:scale-[0.98] transition-all py-3 rounded-xl text-white font-semibold shadow-lg disabled:opacity-50 disabled:pointer-events-none"
+          >
+            {loading ? "Sending Request..." : "Confirm Booking Request"}
+          </button>
+        </form>
       </div>
     </div>
   );
-};
-
-export default page;
+}

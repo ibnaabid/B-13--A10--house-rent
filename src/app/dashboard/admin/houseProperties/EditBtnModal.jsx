@@ -3,7 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-export default function EditModal({ home, close, refresh }) {
+export default function EditHome({ home, close, refresh }) {
   const [form, setForm] = useState({
     title: home.title,
     location: home.location,

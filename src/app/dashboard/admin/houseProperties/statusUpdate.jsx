@@ -4,15 +4,12 @@ import { CheckCircle, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-export default function StatusAdmin({ home }) {
-       const router=  useRouter()
-      
+const StatusUpdate = ({ home }) => {
+    const router = useRouter()
+    console.log("home",home)
+
   const updateStatus = async (status) => {
- 
-    
-  
     try {
-        
       const res = await fetch(
         `http://localhost:5000/allhome/${home._id}`,
         {
@@ -24,11 +21,9 @@ export default function StatusAdmin({ home }) {
         }
       );
 
-      const data = await res.json();
-
       if (res.ok) {
         toast.success(`Property ${status}`);
-        router.refresh()
+router.refresh()
       } else {
         toast.error("Update failed");
       }
@@ -38,22 +33,26 @@ export default function StatusAdmin({ home }) {
   };
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-2">
+
+      {/* ACCEPT */}
       <button
         onClick={() => updateStatus("accepted")}
-        title="Accept"
-        className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition"
+        className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
       >
-        <CheckCircle size={14} />
+        <CheckCircle size={16} />
       </button>
 
+      {/* REJECT */}
       <button
         onClick={() => updateStatus("rejected")}
-        title="Reject"
-        className="p-2 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition"
+        className="p-2 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500/20"
       >
-        <XCircle size={14} />
+        <XCircle size={16} />
       </button>
+
     </div>
   );
-}
+};
+
+export default StatusUpdate;
