@@ -2,7 +2,7 @@ import Image from "next/image";
 import Hero from "./Components/Main";
 import PopularHomes from "./Components/Popular";
 import WhyChooseUs from "./Components/WhyChoose";
-import CustomerReview from "./Components/Review";
+import ReviewCards from "./Reviewcard/page";
 export default function Home() {
   return (
   <>
@@ -10,7 +10,7 @@ export default function Home() {
    <Hero></Hero>
     <PopularHomes></PopularHomes>
     <WhyChooseUs></WhyChooseUs>
-    <CustomerReview></CustomerReview>
+    <ReviewCards></ReviewCards>
   
   </>
   );

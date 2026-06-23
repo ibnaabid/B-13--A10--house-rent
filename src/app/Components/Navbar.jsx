@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   LogIn,
-  UserPlus
+  UserPlus,
+  Star
 } from "lucide-react";
 import { authClient } from "../lib/auth-client";
 
@@ -34,6 +35,7 @@ export default function Navbar() {
     { label: "Properties", href: "/allproperties", icon: Building2 },
     { label: "Locations", href: "/locations", icon: MapPin },
     { label: "Contact", href: "/contact", icon: Phone },
+        { label: "Reviews", href: "/Reviews", icon: Star },
   ];
 
  // ─── ১. অ্যাডমিনসহ সব রোল চেক করার জন্য আপডেট ───
