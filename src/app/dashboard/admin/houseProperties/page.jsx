@@ -14,19 +14,19 @@ import {
   X,
   Send
 } from "lucide-react";
+import Deletework from "./Deletework";
+import EditWork from "./Editwork";
 
 export default function AllHomeTable() {
   const [homes, setHomes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Reject Modal এর জন্য স্টেটস
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [selectedHome, setSelectedHome] = useState(null);
   const [feedback, setFeedback] = useState("");
 
   const BASE_URL = "http://localhost:5000";
 
-  // ১. ডাটাবেস থেকে সব হোম ডেটা ফেচ করা
   const fetchHomes = async () => {
     try {
       setLoading(true);
@@ -44,7 +44,6 @@ export default function AllHomeTable() {
     fetchHomes();
   }, []);
 
-  // ২. হোমের স্ট্যাটাস ACCEPT করা (সরাসরি PATCH API)
   const handleAccept = async (id, title) => {
     try {
       const res = await fetch(`${BASE_URL}/allhome/${id}`, {
@@ -207,21 +206,12 @@ export default function AllHomeTable() {
                       <XCircle size={16} />
                     </button>
 
-                    {/* EDIT BUTTON (পরের ধাপে কাজ করব) */}
-                    <button
-                      className="p-2 rounded-xl bg-blue-500 text-white hover:scale-110 transition opacity-50 cursor-not-allowed"
-                      title="Edit (Locked)"
-                    >
-                      <Pencil size={16} />
-                    </button>
+                    <EditWork home={home}></EditWork>
+                    <Deletework home={home}></Deletework>
 
-                    {/* DELETE BUTTON (পরের ধাপে কাজ করব) */}
-                    <button
-                      className="p-2 rounded-xl bg-gray-900 text-white hover:scale-110 transition opacity-50 cursor-not-allowed"
-                      title="Delete (Locked)"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                   
+
+                    
                   </div>
 
                 </div>
@@ -259,7 +249,7 @@ export default function AllHomeTable() {
                 <textarea
                   required
                   rows="4"
-                  className="w-full rounded-2xl border border-gray-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 resize-none transition"
+                  className="w-full rounded-2xl border text-red-900 font-bold border-gray-800 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 resize-none transition"
                   placeholder="Example: Low quality images, Incorrect location or Unrealistic pricing..."
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
