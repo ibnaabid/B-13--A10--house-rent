@@ -20,8 +20,9 @@ export default function StatusColumn({ item }) {
         );
 
         const data = await res.json();
+        console.log(data)
 
-        setFeedback(data.feedback || "No feedback provided");
+        setFeedback(data?.feedback || "No feedback provided");
       } catch (error) {
         setFeedback("Failed to load feedback");
       } finally {
@@ -49,18 +50,18 @@ export default function StatusColumn({ item }) {
         {item.status || "Pending"}
       </span>
 
-      {/* FEEDBACK (ONLY IF REJECTED) */}
+      {/* FEEDBACK */}
       {status === "rejected" && (
         <div className="mt-2 p-3 rounded-lg border bg-red-50">
           <p className="text-sm font-semibold text-red-600 mb-1">
-            Rejection Feedback 
+            Rejection Feedback
           </p>
 
           {loading ? (
             <p className="text-gray-500 text-sm">Loading...</p>
           ) : (
             <p className="text-gray-700 text-sm">
-              {item.feedback}
+              {feedback}
             </p>
           )}
         </div>
