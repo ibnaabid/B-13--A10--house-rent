@@ -40,7 +40,7 @@ export default function PaginationCustomIcons({
 
           {/* NEXT */}
           <Pagination.Item>
-            <Pagination.Next
+            <Pagination.Next className="text-white font-bold hover:text-blue-600 font-bold"
               isDisabled={page === totalPages}
               onPress={() => setPage(page + 1)}
             >

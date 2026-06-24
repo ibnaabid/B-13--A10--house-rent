@@ -1,35 +1,38 @@
-import { auth } from "@/app/lib/auth";
+"use client";
+
+import { useEffect, useState } from "react";
 import { LocateIcon } from "lucide-react";
-import { headers } from "next/headers";
 import Deletebtn from "./Deletebtn";
 import EditBtn from "./EditBtn";
 import StatusColumn from "./Feedback";
+import PaginationCustomIcons from "@/app/pagination/page";
 
-const Property = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+const Property = () => {
+  const [data, setData] = useState([]);
 
-  const ownerEmail = session?.user?.email;
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
+  const limit = 3;
 
-  if (!ownerEmail) {
-    return (
-      <div className="p-6 text-white bg-slate-950 min-h-screen">
-        <h1 className="text-xl">Please login first</h1>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/allhome?page=${page}&limit=${limit}`
+        );
 
-  const res = await fetch("http://localhost:5000/allhome", {
-    cache: "no-store",
-  });
+        const result = await res.json();
 
-  const data = await res.json();
-  console.log(data,"Properties_data")
+        setData(result.data || []);
+        setTotalPages(result.totalPages || 1);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  const myProperties = data
-  
+    fetchData();
+  }, [page]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-6">
@@ -40,19 +43,17 @@ const Property = async () => {
           My <span className="text-blue-500">Properties</span>
         </h1>
         <p className="text-slate-400 text-sm mt-1">
-          Manage your listings, update status and control everything
+          Simple property list with pagination
         </p>
-       <h2 className="text-xl font-bold mt-3 px-2 text-sky-300"> Observe your Properties : {data.length}</h2>
       </div>
 
-      {/* TABLE WRAPPER */}
-      <div className="bg-slate-900/40 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+      {/* TABLE */}
+      <div className="bg-slate-900/40 border border-slate-800 rounded-2xl overflow-hidden">
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
 
-            {/* HEAD */}
-            <thead className="bg-slate-900 text-slate-300 uppercase text-xs tracking-wider">
+            <thead className="bg-slate-900 text-slate-300 text-xs uppercase">
               <tr>
                 <th className="p-4 text-left">Title</th>
                 <th className="p-4 text-left">Location</th>
@@ -62,60 +63,51 @@ const Property = async () => {
               </tr>
             </thead>
 
-            {/* BODY */}
             <tbody>
-              {myProperties.length > 0 ? (
-                myProperties.map((item) => (
-                  <tr
-                    key={item._id}
-                    className="border-t border-slate-800 hover:bg-slate-800/40 transition"
-                  >
-                    {/* TITLE */}
-                    <td className="p-4 font-medium text-white">
-                      {item.title}
-                    </td>
+              {data.map((item) => (
+                <tr
+                  key={item._id}
+                  className="border-t border-slate-800"
+                >
 
-                    {/* LOCATION */}
-                    <td className="p-4 flex px-2 font-bold text-red-300">
-                    <LocateIcon/> {item.location}
-                    </td>
+                  <td className="p-4">{item.title}</td>
 
-                    {/* PRICE */}
-                    <td className="p-4 text-green-400 font-semibold">
-                      ${item.price}
-                    </td>
-
-                    {/* STATUS */}
-                    <td className="p-4">
-                     <StatusColumn item={item}/>
-                    </td>
-
-                    {/* ACTIONS */}
-                    <td className="p-4 flex gap-2">
-
-                        <EditBtn item={item}></EditBtn>
-
-                     <Deletebtn item={item}></Deletebtn>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="p-10 text-center text-slate-400"
-                  >
-                    No properties found
+                  <td className="p-4 flex items-center gap-1 text-red-300">
+                    <LocateIcon size={16} />
+                    {item.location}
                   </td>
+
+                  <td className="p-4 text-green-400 font-semibold">
+                    ${item.price}
+                  </td>
+
+                  <td className="p-4">
+                    <StatusColumn item={item} />
+                  </td>
+
+                  <td className="p-4 flex gap-2">
+                    <EditBtn item={item} />
+                    <Deletebtn item={item} />
+                  </td>
+
                 </tr>
-              )}
+              ))}
             </tbody>
 
           </table>
         </div>
+
+        {/* PAGINATION */}
+        <div className="p-4 border-t border-slate-800">
+          <PaginationCustomIcons
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
+          />
+        </div>
+
       </div>
     </div>
-
   );
 };
 
