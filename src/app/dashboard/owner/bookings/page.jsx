@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import PaginationCustomIcons from "@/app/pagination/page";
 
-const LIMIT = 5;
+const LIMIT = 3;
 
 const Page = () => {
   const [bookings, setBookings] = useState([]);
@@ -106,16 +106,16 @@ const Page = () => {
                 {/* PROPERTY */}
                 <td className="p-4">
                   <p className="font-medium text-slate-700">
-                    {b.title}
+                    {b.tenantEmail}
                   </p>
                   <p className="text-xs text-slate-400">
-                    {b.location}
+                    {b.propertyTitle}
                   </p>
                 </td>
 
                 {/* AMOUNT */}
                 <td className="p-4 font-bold text-slate-800">
-                  ৳ {b.price}
+                  ৳ {b.bookingAmount}
                 </td>
 
                 {/* STATUS */}
@@ -131,7 +131,7 @@ const Page = () => {
                       }
                     `}
                   >
-                    {b.status || "Pending"}
+                    {b.bookingStatus || "Pending"}
                   </span>
                 </td>
 

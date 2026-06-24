@@ -5,13 +5,12 @@ import PaginationCustomIcons from "@/app/pagination/page";
 
 const Page = () => {
   const [bookings, setBookings] = useState([]);
-
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const limit = 5;
 
-  // replace this with your real logged-in user email (from session/auth)
+  // session থেকে email নিবা
   const userEmail = "user@example.com";
 
   useEffect(() => {
@@ -25,8 +24,8 @@ const Page = () => {
 
         setBookings(data.data || []);
         setTotalPages(data.totalPages || 1);
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.log(error);
       }
     };
 
@@ -34,108 +33,177 @@ const Page = () => {
   }, [page]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-6">
+    <div className="min-h-screen bg-slate-950 p-6 text-white">
+      <div className="max-w-7xl mx-auto">
 
-      {/* HEADER */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">
-          My <span className="text-violet-500">Bookings</span>
-        </h1>
-        <p className="text-slate-400 text-sm mt-1">
-          All your booking history in one place
-        </p>
-      </div>
+        {/* HEADER */}
+        <div className="mb-8 flex flex-col lg:flex-row justify-between gap-4">
 
-      {/* TABLE */}
-      <div className="bg-slate-900/40 border border-slate-800 rounded-2xl overflow-hidden">
+          <div>
+            <h1 className="text-4xl font-black">
+              My <span className="text-violet-500">Bookings</span>
+            </h1>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+            <p className="text-slate-400 mt-2">
+              Track all your property bookings and payment history
+            </p>
+          </div>
 
-            {/* HEAD */}
-            <thead className="bg-slate-900 text-slate-300 uppercase text-xs">
-              <tr>
-                <th className="p-4 text-left">Property Name</th>
-                <th className="p-4 text-left">Booking Date</th>
-                <th className="p-4 text-left">Amount Paid</th>
-                <th className="p-4 text-left">Booking Location</th>
-                <th className="p-4 text-left">Payment Status</th>
-              </tr>
-            </thead>
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl px-6 py-4 min-w-[220px]">
+            <p className="text-slate-400 text-sm">
+              Total Bookings
+            </p>
 
-            {/* BODY */}
-            <tbody>
-              {bookings.length > 0 ? (
-                bookings.map((b) => (
-                  <tr
-                    key={b._id}
-                    className="border-t border-slate-800 hover:bg-slate-800/40 transition"
-                  >
-                    <td className="p-4 font-medium">
-                      {b.title}
-                    </td>
+            <h2 className="text-4xl font-bold text-violet-400 mt-2">
+              {bookings.length}
+            </h2>
+          </div>
 
-                    <td className="p-4 text-slate-300">
-                      {b.location}
-                    </td>
+        </div>
 
-                    <td className="p-4 text-green-400 font-semibold">
-                      ৳ {b.price}
-                    </td>
+        {/* TABLE CARD */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
 
-                    <td className="p-4">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-bold
+          {/* TOP BAR */}
+          <div className="flex items-center justify-between px-6 py-5 border-b border-slate-800">
+            <div>
+              <h2 className="text-xl font-bold">
+                Booking History
+              </h2>
+
+              <p className="text-slate-400 text-sm mt-1">
+                View all booked properties
+              </p>
+            </div>
+          </div>
+
+          {/* TABLE */}
+          <div className="overflow-x-auto">
+
+            <table className="w-full min-w-[900px]">
+
+              <thead>
+                <tr className="bg-slate-800/80 text-slate-300 uppercase text-xs tracking-wider">
+                  <th className="px-6 py-5 text-left">
+                    Property
+                  </th>
+
+                  <th className="px-6 py-5 text-left">
+                    Booking Date
+                  </th>
+
+                  <th className="px-6 py-5 text-left">
+                    Amount Paid
+                  </th>
+
+                  <th className="px-6 py-5 text-left">
+                    Booking Status
+                  </th>
+
+                  <th className="px-6 py-5 text-left">
+                    Payment Status
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {bookings.length > 0 ? (
+                  bookings.map((b) => (
+                    <tr
+                      key={b._id}
+                      className="border-t border-slate-800 hover:bg-slate-800/40 transition-all duration-300"
+                    >
+                      {/* PROPERTY */}
+                      <td className="px-6 py-5">
+                        <div>
+                          <h3 className="font-semibold text-white">
+                            {b.propertyTitle}
+                          </h3>
+
+                          <p className="text-xs text-slate-500 mt-1">
+                            Booking ID: {b._id?.slice(-6)}
+                          </p>
+                        </div>
+                      </td>
+
+                      {/* DATE */}
+                      <td className="px-6 py-5 text-slate-300">
+                        {new Date(
+                          b.createdAt
+                        ).toLocaleDateString()}
+                      </td>
+
+                      {/* AMOUNT */}
+                      <td className="px-6 py-5">
+                        <span className="text-emerald-400 font-bold text-lg">
+                          ৳{" "}
+                          {b.bookingAmount?.toLocaleString()}
+                        </span>
+                      </td>
+
+                      {/* BOOKING STATUS */}
+                      <td className="px-6 py-5">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-bold
                           ${
-                            b.status === "Approved"
+                            b.bookingStatus === "Confirmed"
                               ? "bg-green-500/20 text-green-400"
-                              : b.status === "Rejected"
-                              ? "bg-red-500/20 text-red-400"
                               : "bg-yellow-500/20 text-yellow-400"
                           }`}
-                      >
-                        {b.status || "Pending"}
-                      </span>
-                    </td>
+                        >
+                          {b.bookingStatus || "Pending"}
+                        </span>
+                      </td>
 
-                    <td className="p-4">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-bold
+                      {/* PAYMENT STATUS */}
+                      <td className="px-6 py-5">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-bold
                           ${
-                            b.paymentStatus === "Paid"
-                              ? "bg-green-500/20 text-green-400"
+                            b.paymentStatus === "paid"
+                              ? "bg-emerald-500/20 text-emerald-400"
                               : "bg-red-500/20 text-red-400"
                           }`}
-                      >
-                        {b.status || "paid"}
-                      </span>
+                        >
+                          {b.paymentStatus || "Unpaid"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="py-20 text-center"
+                    >
+                      <div>
+                        <h3 className="text-2xl font-bold text-slate-300">
+                          No Bookings Found
+                        </h3>
+
+                        <p className="text-slate-500 mt-2">
+                          You have not booked any property yet.
+                        </p>
+                      </div>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="p-10 text-center text-slate-400"
-                  >
-                    No bookings found
-                  </td>
-                </tr>
-              )}
-            </tbody>
+                )}
 
-          </table>
+              </tbody>
+            </table>
+          </div>
+
+          {/* PAGINATION */}
+          <div className="border-t border-slate-800 p-5">
+            <PaginationCustomIcons
+              page={page}
+              setPage={setPage}
+              totalPages={totalPages}
+            />
+          </div>
+
         </div>
-
-        {/* PAGINATION */}
-        <div className="p-4 border-t border-slate-800">
-          <PaginationCustomIcons
-            page={page}
-            setPage={setPage}
-            totalPages={totalPages}
-          />
-        </div>
-
       </div>
     </div>
   );

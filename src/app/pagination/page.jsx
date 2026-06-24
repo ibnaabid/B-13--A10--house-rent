@@ -20,11 +20,11 @@ export default function PaginationCustomIcons({
               onPress={() => setPage(page - 1)}
             >
               <Pagination.PreviousIcon>
-                <Icon icon="gravity-ui:arrow-left" />
+                <Icon className="bg-red-800 rounded-3xl" icon=" gravity-ui:arrow-left" />
               </Pagination.PreviousIcon>
-              Back
+              <h2 className=" text-blue-600 font-bold">Back</h2>
             </Pagination.Previous>
-          </Pagination.Item>
+          </Pagination.Item>s
 
           {/* NUMBERS */}
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
@@ -44,7 +44,7 @@ export default function PaginationCustomIcons({
               isDisabled={page === totalPages}
               onPress={() => setPage(page + 1)}
             >
-              Forward
+              <p className="text-green-700 font-bold">Forward</p>
               <Pagination.NextIcon>
                 <Icon icon="gravity-ui:arrow-right" />
               </Pagination.NextIcon>
