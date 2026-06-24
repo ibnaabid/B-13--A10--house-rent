@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { LocateIcon, Search, Home } from "lucide-react";
+import { LocateIcon, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const AllProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [search, setSearch] = useState("");
   const [propertyType, setPropertyType] = useState("");
@@ -16,18 +19,26 @@ const AllProperties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const res = await fetch("http://localhost:5000/allhome");
+        setLoading(true);
+
+        const res = await fetch(
+          `http://localhost:5000/allhome?page=${page}&limit=6`
+        );
+
         const data = await res.json();
-        setProperties(data);
+
+        setProperties(data.data || []);
+        setTotalPages(data.totalPages || 1);
       } catch (err) {
         console.log(err);
+        setProperties([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProperties();
-  }, []);
+  }, [page]);
 
   const filteredProperties = useMemo(() => {
     let result = [...properties];
@@ -54,6 +65,14 @@ const AllProperties = () => {
 
     return result;
   }, [properties, search, propertyType, sort]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-slate-950 text-white">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-6">
@@ -166,6 +185,40 @@ const AllProperties = () => {
         ))}
       </div>
 
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-2 mt-10 flex-wrap">
+
+        <button
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+          className="px-4 py-2 bg-slate-800 rounded-lg disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          <button
+            key={p}
+            onClick={() => setPage(p)}
+            className={`px-4 py-2 rounded-lg ${
+              page === p
+                ? "bg-violet-600 text-white"
+                : "bg-slate-800 text-slate-300"
+            }`}
+          >
+            {p}
+          </button>
+        ))}
+
+        <button
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-slate-800 rounded-lg disabled:opacity-50"
+        >
+          Next
+        </button>
+
+      </div>
     </div>
   );
 };
