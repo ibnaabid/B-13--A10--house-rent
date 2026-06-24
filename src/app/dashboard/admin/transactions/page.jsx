@@ -1,14 +1,39 @@
-const Page = async () => {
-  const res = await fetch("http://localhost:5000/Bookings", {
-    cache: "no-store",
-  });
+"use client";
 
-  const bookings = await res.json();
+import { useEffect, useState } from "react";
+import PaginationCustomIcons from "@/app/pagination/page";
+
+const LIMIT = 10;
+
+export default function Page() {
+  const [bookings, setBookings] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/Bookings?page=${page}&limit=${LIMIT}`
+        );
+
+        const data = await res.json();
+
+        setBookings(data.data || []);
+        setTotalPages(data.totalPages || 1);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBookings();
+  }, [page]);
 
   return (
     <div className="min-h-screen bg-slate-950 p-4 sm:p-6 lg:p-8 text-white">
       <div className="max-w-7xl mx-auto">
 
+        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold">
             Transactions
@@ -18,6 +43,7 @@ const Page = async () => {
           </p>
         </div>
 
+        {/* Stats */}
         <div className="grid gap-4 md:grid-cols-3 mb-8">
           <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
             <p className="text-slate-400 text-sm">Total Transactions</p>
@@ -29,11 +55,11 @@ const Page = async () => {
           <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
             <p className="text-slate-400 text-sm">Revenue</p>
             <h2 className="text-3xl font-bold text-green-400 mt-2">
-              $
+              ৳
               {bookings
                 .reduce(
                   (total, item) =>
-                    total + Number(item.bookingAmount || item.amount || 0),
+                    total + Number(item.bookingAmount || 0),
                   0
                 )
                 .toLocaleString()}
@@ -43,11 +69,16 @@ const Page = async () => {
           <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
             <p className="text-slate-400 text-sm">Completed</p>
             <h2 className="text-3xl font-bold text-blue-400 mt-2">
-              {bookings.length}
+              {
+                bookings.filter(
+                  (item) => item.status === "Approved"
+                ).length
+              }
             </h2>
           </div>
         </div>
 
+        {/* Table */}
         <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
           <table className="min-w-[900px] w-full">
             <thead>
@@ -55,18 +86,27 @@ const Page = async () => {
                 <th className="px-6 py-4 text-left">
                   Transaction ID
                 </th>
+
                 <th className="px-6 py-4 text-left">
                   Property Name
                 </th>
+
                 <th className="px-6 py-4 text-left">
                   Tenant Email
                 </th>
+
                 <th className="px-6 py-4 text-left">
-                 Transciotions Id
+                  Payment ID
                 </th>
+
                 <th className="px-6 py-4 text-left">
                   Amount
                 </th>
+
+                <th className="px-6 py-4 text-left">
+                  Status
+                </th>
+
                 <th className="px-6 py-4 text-left">
                   Date
                 </th>
@@ -74,45 +114,78 @@ const Page = async () => {
             </thead>
 
             <tbody>
-              {bookings?.map((item) => (
-                <tr
-                  key={item._id}
-                  className="border-b border-slate-800 hover:bg-slate-800/40 transition"
-                >
-                  <td className="px-6 py-4 font-mono text-cyan-400">
-                    TXN-{item._id?.slice(-8)}
-                  </td>
+              {bookings.length > 0 ? (
+                bookings.map((item) => (
+                  <tr
+                    key={item._id}
+                    className="border-b border-slate-800 hover:bg-slate-800/40 transition"
+                  >
+                    <td className="px-6 py-4 font-mono text-cyan-400">
+                      TXN-{item._id?.slice(-8)}
+                    </td>
 
-                  <td className="px-6 py-4">
-                    {item.propertyTitle || item.propertyName}
-                  </td>
+                    <td className="px-6 py-4">
+                      {item.propertyTitle || "N/A"}
+                    </td>
 
-                  <td className="px-6 py-4">
-                    {item.tenantEmail || item.tenantName || "N/A"}
-                  </td>
+                    <td className="px-6 py-4">
+                      {item.tenantEmail || "N/A"}
+                    </td>
 
-                  <td className="px-6 py-4">
-                    {item.transactionId || item.transactionId || "N/A"}
-                  </td>
+                    <td className="px-6 py-4">
+                      {item.transactionId || "N/A"}
+                    </td>
 
-                  <td className="px-6 py-4 text-green-400 font-semibold">
-                    ${item.bookingAmount || item.amount || 0}
-                  </td>
+                    <td className="px-6 py-4 text-green-400 font-semibold">
+                      ৳ {item.bookingAmount || 0}
+                    </td>
 
-                  <td className="px-6 py-4 text-slate-400">
-                    {item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString()
-                      : "N/A"}
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          item.status === "Approved"
+                            ? "bg-green-500/20 text-green-400"
+                            : item.status === "Rejected"
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-yellow-500/20 text-yellow-400"
+                        }`}
+                      >
+                        {item.status || "Pending"}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4 text-slate-400">
+                      {item.createdAt
+                        ? new Date(
+                            item.createdAt
+                          ).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="text-center py-10 text-slate-400"
+                  >
+                    No Transactions Found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
-        </div>
 
+          {/* Pagination */}
+          <div className="p-5 border-t border-slate-800 flex justify-center">
+            <PaginationCustomIcons
+              page={page}
+              setPage={setPage}
+              totalPages={totalPages}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
-};
-
-export default Page;
+}

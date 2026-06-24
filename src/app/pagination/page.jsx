@@ -1,7 +1,6 @@
 "use client";
 
 import { Pagination } from "@heroui/react";
-import { Icon } from "@iconify/react";
 
 export default function PaginationCustomIcons({
   page,
@@ -9,51 +8,39 @@ export default function PaginationCustomIcons({
   totalPages,
 }) {
   return (
-    <div className="mt-6 flex justify-center">
+    <Pagination className="justify-center">
+      <Pagination.Content>
+        <Pagination.Item>
+          <Pagination.Previous
+            isDisabled={page === 1}
+            onPress={() => setPage(page - 1)}
+          >
+            <Pagination.PreviousIcon />
+            <span className="text-white font-bold">Previous</span>
+          </Pagination.Previous>
+        </Pagination.Item>
 
-      <Pagination>
-        <Pagination.Content>
-
-          <Pagination.Item>
-            <Pagination.Previous
-              isDisabled={page === 1}
-              onPress={() => setPage(page - 1)}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          <Pagination.Item key={p}>
+            <Pagination.Link
+              isActive={p === page}
+              onPress={() => setPage(p)}
             >
-              <Pagination.PreviousIcon>
-                <Icon className="bg-red-800 rounded-3xl" icon=" gravity-ui:arrow-left" />
-              </Pagination.PreviousIcon>
-              <h2 className=" text-blue-600 font-bold">Back</h2>
-            </Pagination.Previous>
-          </Pagination.Item>s
-
-          {/* NUMBERS */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <Pagination.Item key={p}>
-              <Pagination.Link
-                isActive={p === page}
-                onPress={() => setPage(p)}
-              >
-                {p}
-              </Pagination.Link>
-            </Pagination.Item>
-          ))}
-
-          {/* NEXT */}
-          <Pagination.Item>
-            <Pagination.Next className="text-white font-bold hover:text-blue-600 font-bold"
-              isDisabled={page === totalPages}
-              onPress={() => setPage(page + 1)}
-            >
-              <p className="text-green-700 font-bold">Forward</p>
-              <Pagination.NextIcon>
-                <Icon icon="gravity-ui:arrow-right" />
-              </Pagination.NextIcon>
-            </Pagination.Next>
+              {p}
+            </Pagination.Link>
           </Pagination.Item>
+        ))}
 
-        </Pagination.Content>
-      </Pagination>
-
-    </div>
+        <Pagination.Item>
+          <Pagination.Next
+            isDisabled={page === totalPages}
+            onPress={() => setPage(page + 1)}
+          >
+            <span className="text-green-600 font-bold">Next</span>
+            <Pagination.NextIcon />
+          </Pagination.Next>
+        </Pagination.Item>
+      </Pagination.Content>
+    </Pagination>
   );
 }
