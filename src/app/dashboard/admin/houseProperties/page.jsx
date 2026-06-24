@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Editwork from "./Editwork";
 import Deletework from "./Deletework";
+import RejectModal from "./RejectModal";
 
 export default function Page() {
   const [bookings, setBookings] = useState([]);
@@ -177,17 +178,7 @@ export default function Page() {
                         Approve
                       </button>
 
-                      <button
-                        onClick={() =>
-                          updateStatus(
-                            home._id,
-                            "Rejected"
-                          )
-                        }
-                        className="px-3 py-2 bg-red-600 rounded-lg text-white hover:bg-red-700"
-                      >
-                        Reject
-                      </button>
+                      <RejectModal home={home}/>
 
                     <Editwork home={home}/>
 
