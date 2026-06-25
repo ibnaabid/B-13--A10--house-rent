@@ -13,7 +13,6 @@ const Page = () => {
 
   useEffect(() => {
     if (isPending) return;
-    // এখানে রিডাইরেকশন লজিক থাকলে যোগ করতে পারেন
   }, [session, isPending, router]);
 
   if (isPending) {
@@ -34,7 +33,6 @@ const Page = () => {
       
       <div className="bg-slate-900 border border-slate-850 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950/20">
         
-        {/* Decorative background blur */}
         <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 relative z-10">

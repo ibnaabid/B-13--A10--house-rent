@@ -28,21 +28,19 @@ export default function Navbar() {
   const { data: session, isPending } = authClient.useSession();
   console.log(session,"useSession")
   const role = session?.user?.role;
-  // console.log("role",role)
+
 
   const navLinks = [
     { label: "Home", href: "/", icon: Home },
     { label: "Properties", href: "/allproperties", icon: Building2 },
     { label: "Locations", href: "/locations", icon: MapPin },
     { label: "Contact", href: "/contact", icon: Phone },
-        { label: "Reviews", href: "/Reviews", icon: Star },
+    { label: "Reviews", href: "/Reviews", icon: Star },
   ];
 
- // ─── ১. অ্যাডমিনসহ সব রোল চেক করার জন্য আপডেট ───
   const getDashboardLink = () => {
     if (!session?.user) return null;
     
-    // মেইন অ্যাডমিন ইমেইল চেক
     if (session.user.email === "mdabout2@gmail.com") {
       return "/dashboard/admin";
     }
@@ -63,7 +61,6 @@ export default function Navbar() {
           onSuccess: () => {
             setUserOpen(false);
             setMenuOpen(false);
-            // সরাসরি হোমপেজে পুশ করে রিফ্রেশ দিন যাতে ওল্ড সেশন ক্যাশ ক্লিন হয়ে যায়
             router.push("/login");
             router.refresh();
           },
@@ -216,7 +213,6 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {/* 🔥 মোবাইল ড্রয়ারের নিচে আলাদা হাইলাইটেড ড্যাশবোর্ড লিঙ্ক */}
             {session && dashboardLink && (
               <Link
                 href={dashboardLink}

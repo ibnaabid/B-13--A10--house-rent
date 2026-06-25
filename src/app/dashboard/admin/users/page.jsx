@@ -38,7 +38,7 @@ export default function UsersPage() {
     try {
 
       const {data :token} = await authClient.token()
-      console.log("token",token)
+      // console.log("token",token)
 
 
 
