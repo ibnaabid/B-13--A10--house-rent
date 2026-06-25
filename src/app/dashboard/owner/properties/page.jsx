@@ -7,6 +7,7 @@ import EditBtn from "./EditBtn";
 // import StatusColumn from "./Feedback";
 import PaginationCustomIcons from "@/app/pagination/page";
 import ViewFeedbackModal from "./Feedback";
+import { authClient } from "@/app/lib/auth-client";
 
 const Property = () => {
   const [data, setData] = useState([]);
@@ -19,8 +20,18 @@ const Property = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const {data:token} = await authClient.token();
+      
         const res = await fetch(
-          `http://localhost:5000/allhome?page=${page}&limit=${limit}`
+          `http://localhost:5000/allhome?page=${page}&limit=${limit}`,
+
+             {headers:
+               {
+            authorization : `Bearer ${token.token}`
+          }
+
+            
+          }
         );
 
         const result = await res.json();

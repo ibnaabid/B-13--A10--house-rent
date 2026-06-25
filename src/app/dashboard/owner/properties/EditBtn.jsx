@@ -3,6 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
+import { authClient } from "@/app/lib/auth-client";
 
 const EditBtn = ({ item }) => {
   const [form, setForm] = useState({
@@ -20,12 +21,16 @@ const EditBtn = ({ item }) => {
 
   const handleUpdate = async () => {
     try {
+      const {data:token} = await authClient.token();
+        console.log(token.token,"tok")
+    
       const res = await fetch(
         `http://localhost:5000/allhome/${item._id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization : `Bearer ${token.token}`
           },
           body: JSON.stringify(form),
         }

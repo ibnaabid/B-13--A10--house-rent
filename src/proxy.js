@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers';
 import { auth } from './app/lib/auth';
 import { url } from 'better-auth';
-// import next from 'next';
+
 
 export async function proxy(request) {
 
@@ -12,8 +12,6 @@ export async function proxy(request) {
     headers: await headers(),
   });
 
-  // const UserEmail =session?.user?.email;
-  // const pass = session?.user?.password
 
   const userRole = session?.user?.role;
   

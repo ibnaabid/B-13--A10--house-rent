@@ -21,7 +21,7 @@ const Page = () => {
         const res = await fetch(
           `http://localhost:5000/Bookings?page=${page}&limit=${limit}`,
           
-          {headers: {
+         {headers: {
             authorization : `Bearer ${token.token}`
           }
 
@@ -51,7 +51,7 @@ const Page = () => {
         {/* HEADER */}
         <div className="mb-8 flex flex-col lg:flex-row justify-between gap-4">
 
-          <div>
+          <di v>
             <h1 className="text-4xl font-black">
               My <span className="text-violet-500">Bookings</span>
             </h1>
@@ -59,7 +59,7 @@ const Page = () => {
             <p className="text-slate-400 mt-2">
               Track all your property bookings and payment history
             </p>
-          </div>
+          </di>
 
           <div className="bg-slate-900 border border-slate-800 rounded-3xl px-6 py-4 min-w-[220px]">
             <p className="text-slate-400 text-sm">
