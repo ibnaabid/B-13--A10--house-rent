@@ -16,7 +16,7 @@ export default function PaginationCustomIcons({
             onPress={() => setPage(page - 1)}
           >
             <Pagination.PreviousIcon />
-            <span className="text-white font-bold">Previous</span>
+            <span className="text-red-600 font-bold">Previous</span>
           </Pagination.Previous>
         </Pagination.Item>
 

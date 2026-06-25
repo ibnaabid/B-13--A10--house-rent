@@ -1,4 +1,6 @@
 import { authClient } from '@/app/lib/auth-client';
+import toast from 'react-hot-toast';
+// import { headers } from 'next/headers';
 
 
 const Deletework = ({home}) => {
@@ -12,17 +14,19 @@ const Deletework = ({home}) => {
   if (!confirmDelete) return;
 
   const res = await fetch(
-    `http://localhost:5000/allhome/${home._id}`,
-    {
-      method: "DELETE",
-      authorization : `Bearer ${token.token}`
+  `http://localhost:5000/allhome/${home._id}`,
+  {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${token.token}`
     }
-  );
+  }
+);
 
   const data = await res.json();
 
   if (data.deletedCount > 0) {
-    alert("Deleted Successfully");
+    toast.success("Deleted Successfully");
     window.location.reload();
   }
 };

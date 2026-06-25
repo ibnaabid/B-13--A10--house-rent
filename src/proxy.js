@@ -16,24 +16,19 @@ const user = session?.user;
   const userRole = user?.role;
   const { pathname } = request.nextUrl;
 
-  // ১. ইউজার লগইন করা না থাকলে সরাসরি লগইন পেজে রিডাইরেক্ট করুন
   if (!user) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // ২. ইউআরএল পাথ (Pathname) অনুযায়ী রোল চেক করুন
   
-  // Tenant ড্যাশবোর্ড প্রটেকশন
   if (pathname.startsWith("/dashboard/tenant") && userRole !== "tenant") {
-    return NextResponse.redirect(new URL("/login", request.url)); // অনধিকার প্রবেশ হলে হোমে পাঠান
+    return NextResponse.redirect(new URL("/login", request.url)); 
   }
 
-  // Admin ড্যাশবোর্ড প্রটেকশন
   if (pathname.startsWith("/dashboard/admin") && userRole !== "admin") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Owner ড্যাশবোর্ড প্রটেকশন
   if (pathname.startsWith("/dashboard/owner") && userRole !== "owner") {
     return NextResponse.redirect(new URL("/login", request.url));
   }

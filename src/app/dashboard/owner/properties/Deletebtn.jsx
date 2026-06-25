@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const Deletebtn = ({item}) => {
-const router = useRouter()
 
     const delHandler= async()=>{
       
             const {data:token} = await authClient.token();
+            console.log(token)
             
 
         const res = await fetch (`http://localhost:5000/allhome/${item?._id}`,{
@@ -25,7 +25,7 @@ const router = useRouter()
         const data = await res.json()
         console.log(data)
         toast.success("Delete successfully !")
-     router.refresh()
+   window.location.reload()
 
 
 

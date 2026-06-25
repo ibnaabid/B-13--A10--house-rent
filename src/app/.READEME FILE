@@ -1,0 +1,87 @@
+# RentSphere
+
+## Project Purpose
+
+RentSphere is a modern house rental platform that connects property owners and tenants in a secure and user-friendly environment. Owners can list rental properties, tenants can browse and book properties, and administrators can manage platform activities efficiently.
+
+### Authentication & Authorization
+
+- Secure authentication using Better Auth
+- Role-based access control (Admin, Owner, Tenant)
+- Protected routes and APIs using JWT verification
+
+### Property Management
+
+- Owners can add new rental properties
+- Owners can update property information
+- Owners can delete their properties
+- Property approval and rejection system
+
+### Tenant Features
+
+- Browse all available properties
+- Search and filter properties
+- Add properties to favorites
+- Book rental properties online
+- View booking history
+
+### Admin Features
+
+- Manage users and roles
+- Approve or reject property listings
+- Provide rejection feedback to owners
+- Monitor platform activities
+
+### Payment System
+
+- Secure online payments using Stripe
+- Booking confirmation after successful payment
+- Transaction tracking
+
+### Reviews & Feedback
+
+- Tenants can submit property reviews
+- Rating system for properties
+- Admin rejection feedback system
+
+### Responsive Design
+
+- Mobile-friendly UI
+- Tablet and desktop support
+- Modern dashboard experience
+
+## Technologies Used
+
+### Frontend
+
+- Next.js
+- React
+- Tailwind CSS
+- Framer Motion
+- HeroUI
+- Lucide React
+- React Hot Toast
+
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB
+- JOSE JWT Verification
+- Better Auth
+
+### Payment Gateway
+
+- Stripe
+
+## Future Improvements
+
+- Property image gallery
+- Real-time notifications
+- Advanced analytics dashboard
+- Property recommendation system
+- Chat between owner and tenant
+
+---
+
+Developed as a full-stack house rental management platform using Next.js, Express.js, MongoDB, Better Auth, JWT, and Stripe.
