@@ -57,7 +57,7 @@ export default function ReviewForm({ propertyId }) {
   };
 
   return (
-    <div className="max-w-xl mx-auto">
+    <div className="max-w-xl mt-5 px-5 mb-5 mx-auto">
       <div className="relative">
         
         {/* Glow Effects */}

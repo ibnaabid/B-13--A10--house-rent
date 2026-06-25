@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Eye, XCircle } from "lucide-react";
+import { authClient } from "@/app/lib/auth-client";
 
 const ViewFeedbackModal = ({ item }) => {
   
@@ -14,8 +15,18 @@ const ViewFeedbackModal = ({ item }) => {
     setLoading(true);
 
     try {
+
+      const {data:token} = await authClient.token()
+
+
       const res = await fetch(
-        `http://localhost:5000/reject-feedback/${item?._id}`
+        `http://localhost:5000/reject-feedback/${item?._id}`,
+        {
+          headers:
+          {
+            authorization : `Bearer ${token.token}`
+          }
+        }
       );
 
       const data = await res.json();

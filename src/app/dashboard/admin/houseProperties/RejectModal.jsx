@@ -14,7 +14,6 @@ const RejectModal = ({ home }) => {
 
   const handleSubmit = async () => {
 
-    const {data:token} = await authClient.token()
 
 
     if (!feedback) {
@@ -22,6 +21,8 @@ const RejectModal = ({ home }) => {
     }
 
     try {
+      
+    const {data:token} = await authClient.token()
       setLoading(true);
 
       // Save feedback

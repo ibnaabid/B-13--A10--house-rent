@@ -14,8 +14,6 @@ const router = useRouter()
             const {data:token} = await authClient.token();
             
 
-
-
         const res = await fetch (`http://localhost:5000/allhome/${item?._id}`,{
             method:"DELETE",
             headers:{
