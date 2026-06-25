@@ -11,12 +11,13 @@ const Page = () => {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
-  if(!session?.user?.role == "admin"){
+
+
+  useEffect(() => {
+      if(session?.user?.role !== "admin"){
     router.push("/login")
 
   }
-
-  useEffect(() => {
     if (isPending) return;
   }, [session, isPending, router]);
 

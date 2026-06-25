@@ -13,7 +13,7 @@ const Page = () => {
     if (!isPending) {
       if (!session?.user) {
         router.push("/login");
-      } else if (session.user.role !== "tenant") {
+      } else if (session?.user?.role !== "tenant") {
         router.push("/");
       }
     }

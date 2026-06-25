@@ -22,13 +22,11 @@ export default function LoginPage() {
     const userEmail = session.user.email;
     const role = session.user.role;
 
-    // Admin check — শুধু email দিয়ে
     if (role === "admin") {
       router.push("/dashboard/admin");
       return;
     }
-
-    // Role based routing
+    
     if (role === "owner") {
       router.push("/dashboard/owner");
     } else if (role === "tenant") {
