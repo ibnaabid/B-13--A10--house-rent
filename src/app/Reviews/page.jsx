@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Star, Send, User, MessageSquare } from "lucide-react";
+import { MessageSquare, Send, Star, User } from "lucide-react";
 
 export default function ReviewForm({ propertyId }) {
   const [form, setForm] = useState({ name: "", comment: "" });
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const ratingLabels = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -54,119 +56,121 @@ export default function ReviewForm({ propertyId }) {
     }
   };
 
-  const ratingLabels = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
-
   return (
-    <div className="max-w-lg  mx-auto">
-      <div className="relative py-5 rounded-2xl overflow-hidden">
+    <div className="max-w-xl mx-auto">
+      <div className="relative">
+        
+        {/* Glow Effects */}
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-500/20 blur-3xl rounded-full"></div>
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500/20 blur-3xl rounded-full"></div>
 
-        {/* border glow */}
-        <div className="absolute inset-0 rounded-2xl p-[1px] bg-gradient-to-br from-blue-500/30 via-slate-700/20 to-indigo-500/20 pointer-events-none" />
+        {/* Main Card */}
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+          
+          {/* Top Gradient */}
+          <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500"></div>
 
-        <div className="relative bg-slate-900/80 backdrop-blur-xl rounded-2xl p-7">
+          <div className="p-8">
+            
+            {/* Header */}
+            <div className="mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                  <MessageSquare className="w-6 h-6 text-white" />
+                </div>
 
-          {/* Header */}
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <MessageSquare size={14} className="text-blue-400" />
+                <div>
+                  <h2 className="text-2xl font-black text-indigo-900/40">
+                    Leave a Review
+                  </h2>
+                  <p className="text-slate-400 text-sm">
+                    Share your experience about this property
+                  </p>
+                </div>
               </div>
-              <h2 className="text-lg font-semibold text-white">Leave a Review</h2>
             </div>
-            <p className="text-sm text-slate-500 ml-9">
-              Share your experience about this property
-            </p>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              
+              {/* Name */}
+              <div className="relative group">
+                <User className="absolute left-4 top-4 text-slate-400 w-4 h-4 group-focus-within:text-blue-400 transition-colors" />
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                  className="w-full pl-11 pr-4 py-4 rounded-2xl bg-slate-900/80 border border-slate-700 focus:border-blue-500 text-white outline-none transition"
+                />
+              </div>
+
+              {/* Comment */}
+              <div className="relative group">
+                <MessageSquare className="absolute left-4 top-4 text-slate-400 w-4 h-4 group-focus-within:text-blue-400 transition-colors" />
+                <textarea
+                  name="comment"
+                  value={form.comment}
+                  onChange={handleChange}
+                  rows={5}
+                  placeholder="Write your experience..."
+                  className="w-full pl-11 pr-4 py-4 rounded-2xl bg-slate-900/80 border border-slate-700 focus:border-blue-500 text-white outline-none resize-none transition"
+                />
+              </div>
+
+              {/* Rating */}
+              <div className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-slate-400 text-sm">Property Rating</p>
+                    <h4 className="text-yellow-400 font-bold mt-1">
+                      {ratingLabels[hover || rating] || "Select Rating"}
+                    </h4>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {[...Array(5)].map((_, i) => {
+                      const starValue = i + 1;
+                      return (
+                        <Star
+                          key={i}
+                          size={30}
+                          onClick={() => setRating(starValue)}
+                          onMouseEnter={() => setHover(starValue)}
+                          onMouseLeave={() => setHover(null)}
+                          className={`cursor-pointer transition-all duration-200 hover:scale-125 ${
+                            starValue <= (hover || rating)
+                              ? "text-yellow-400 fill-yellow-400"
+                              : "text-slate-600"
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-600 hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-blue-600/30 flex justify-center items-center gap-2 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    Submit Review
+                  </>
+                )}
+              </button>
+              
+            </form>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-
-            {/* Name */}
-            <div className="relative group">
-              <User
-                size={15}
-                className="absolute left-3.5 top-3.5 text-slate-500 group-focus-within:text-blue-400 transition-colors"
-              />
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Your name"
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-800/60 border border-slate-700/50 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 text-white text-sm outline-none transition-all placeholder:text-slate-600"
-              />
-            </div>
-
-            {/* Comment */}
-            <div className="relative group">
-              <MessageSquare
-                size={15}
-                className="absolute left-3.5 top-3.5 text-slate-500 group-focus-within:text-blue-400 transition-colors"
-              />
-              <textarea
-                name="comment"
-                value={form.comment}
-                onChange={handleChange}
-                placeholder="Write your experience..."
-                rows={4}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-800/60 border border-slate-700/50 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 text-white text-sm outline-none transition-all resize-none placeholder:text-slate-600"
-              />
-            </div>
-
-            {/* Star Rating */}
-            <div className="bg-slate-800/40 rounded-xl px-4 py-3 flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-400 font-medium mb-0.5">Your Rating</p>
-                <p className={`text-sm font-semibold transition-colors ${
-                  hover || rating ? "text-yellow-400" : "text-slate-600"
-                }`}>
-                  {ratingLabels[hover || rating] || "Select rating"}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => {
-                  const starValue = i + 1;
-                  return (
-                    <Star
-                      key={i}
-                      size={24}
-                      onClick={() => setRating(starValue)}
-                      onMouseEnter={() => setHover(starValue)}
-                      onMouseLeave={() => setHover(null)}
-                      className={`cursor-pointer transition-all duration-150 hover:scale-110 ${
-                        starValue <= (hover || rating)
-                          ? "text-yellow-400 fill-yellow-400"
-                          : "text-slate-600"
-                      }`}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-xl font-semibold text-sm text-white
-              bg-blue-600 hover:bg-blue-500
-              disabled:opacity-50 disabled:cursor-not-allowed
-              transition-all duration-200 flex items-center justify-center gap-2
-              shadow-lg shadow-blue-600/20"
-            >
-              {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                <>
-                  <Send size={15} />
-                  Submit Review
-                </>
-              )}
-            </button>
-
-          </form>
         </div>
       </div>
     </div>
