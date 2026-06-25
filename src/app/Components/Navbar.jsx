@@ -28,7 +28,7 @@ export default function Navbar() {
   const { data: session, isPending } = authClient.useSession();
   console.log(session,"useSession")
   const role = session?.user?.role;
-  console.log("role",role)
+  // console.log("role",role)
 
   const navLinks = [
     { label: "Home", href: "/", icon: Home },

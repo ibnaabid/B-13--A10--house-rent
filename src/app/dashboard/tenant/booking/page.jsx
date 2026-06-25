@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import PaginationCustomIcons from "@/app/pagination/page";
+import { authClient } from "@/app/lib/auth-client";
 
 const Page = () => {
   const [bookings, setBookings] = useState([]);
@@ -9,15 +10,26 @@ const Page = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const limit = 5;
-
-  // session থেকে email নিবা
-  const userEmail = "user@example.com";
+  
 
   useEffect(() => {
     const fetchBookings = async () => {
+      const {data:token} = await authClient.token();
+      
+     
       try {
         const res = await fetch(
-          `http://localhost:5000/bookings?email=${userEmail}&page=${page}&limit=${limit}`
+          `http://localhost:5000/Bookings?page=${page}&limit=${limit}`,
+          
+          {headers: {
+            authorization : `Bearer ${token.token}`
+          }
+
+            
+          }
+
+
+
         );
 
         const data = await res.json();

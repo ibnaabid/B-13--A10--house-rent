@@ -22,12 +22,8 @@ export default function DashboardLayout({ children }) {
   ];
 
   return (
-    // md:flex-row এর মাধ্যমে বড় স্ক্রিনে পাশাপাশি লেআউট হবে
     <div className="min-h-screen bg-slate-950 flex flex-col md:flex-row text-white antialiased">
       
-      {/* ========================================================= */}
-      {/* ১. DESKTOP SIDEBAR (শুধুমাত্র মাঝারি ও বড় স্ক্রিনে দেখাবে) */}
-      {/* ========================================================= */}
       <aside className="w-64 xl:w-72 bg-slate-900 border-r border-slate-800/60 hidden md:flex flex-col shrink-0">
         
         {/* ব্র্যান্ড লোগো */}
@@ -38,7 +34,6 @@ export default function DashboardLayout({ children }) {
           <p className="text-slate-400 text-xs mt-1">Tenant Dashboard</p>
         </div>
 
-        {/* নেভিগেশন লিংকস */}
         <nav className="flex-1 p-4 space-y-1.5">
           {menuItems.map((item) => {
             const Icon = item.icon;
