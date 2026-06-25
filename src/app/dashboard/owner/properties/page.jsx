@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { LocateIcon } from "lucide-react";
 import Deletebtn from "./Deletebtn";
 import EditBtn from "./EditBtn";
-import StatusColumn from "./Feedback";
+// import StatusColumn from "./Feedback";
 import PaginationCustomIcons from "@/app/pagination/page";
+import ViewFeedbackModal from "./Feedback";
 
 const Property = () => {
   const [data, setData] = useState([]);
@@ -82,7 +83,7 @@ const Property = () => {
                   </td>
 
                   <td className="p-4">
-                    <StatusColumn item={item} />
+                    <ViewFeedbackModal item={item} />
                   </td>
 
                   <td className="p-4 flex gap-2">

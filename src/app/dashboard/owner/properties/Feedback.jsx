@@ -1,71 +1,100 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Eye, XCircle } from "lucide-react";
 
-export default function StatusColumn({ item }) {
+const ViewFeedbackModal = ({ item }) => {
+  
+  const [open, setOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const status = item?.status?.toLowerCase();
+  const handleOpen = async () => {
+    setOpen(true);
+    setLoading(true);
 
-  useEffect(() => {
-    const fetchFeedback = async () => {
-      if (status !== "rejected") return;
+    try {
+      const res = await fetch(
+        `http://localhost:5000/reject-feedback/${item?._id}`
+      );
 
-      try {
-        setLoading(true);
+      const data = await res.json();
+      console.log(data,"feddback")
 
-        const res = await fetch(
-          `http://localhost:5000/reject-feedback/${item._id}`
-        );
-
-        const data = await res.json();
-        console.log(data)
-
-        setFeedback(data?.feedback || "No feedback provided");
-      } catch (error) {
-        setFeedback("Failed to load feedback");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeedback();
-  }, [status, item._id]);
+      setFeedback(data?.feedback || "No feedback found");
+    } catch (error) {
+      console.log(error);
+      setFeedback("Failed to load feedback");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="space-y-2">
-
-      {/* STATUS BADGE */}
-      <span
-        className={`px-3 py-1 rounded-full text-xs font-semibold inline-block
-          ${
-            status === "accepted"
-              ? "bg-green-100 text-green-600"
-              : status === "rejected"
-              ? "bg-red-100 text-red-600"
-              : "bg-yellow-100 text-yellow-600"
-          }`}
+    <>
+      <button
+        onClick={handleOpen}
+        className="bg-red-700 flex px-3 pb-2 gap-2 hover:bg-violet-700 text-white p-2 rounded-xl transition"
       >
-        {item.status || "Pending"}
-      </span>
+        <Eye size={18} /> Reject
+      </button>
 
-      {/* FEEDBACK */}
-      {status === "rejected" && (
-        <div className="mt-2 p-3 rounded-lg border bg-red-50">
-          <p className="text-sm font-semibold text-red-600 mb-1">
-            Rejection Feedback
-          </p>
+      {open && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden">
 
-          {loading ? (
-            <p className="text-gray-500 text-sm">Loading...</p>
-          ) : (
-            <p className="text-gray-700 text-sm">
-              {feedback}
-            </p>
-          )}
+            {/* Header */}
+            <div className="bg-gradient-to-r from-red-600 to-purple-700 p-5 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-white">
+                Rejection Feedback
+              </h2>
+
+              <button
+                onClick={() => setOpen(false)}
+                className="text-white hover:text-red-300"
+              >
+                <XCircle size={24} />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-6">
+              {loading ? (
+                <div className="text-center text-slate-400">
+                  Loading...
+                </div>
+              ) : (
+                <>
+                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-4">
+                    <p className="text-slate-300 leading-relaxed">
+                      {feedback}
+                    </p>
+                  </div>
+
+                  <div className="mt-5 bg-red-500/10 border border-red-500/20 rounded-xl p-3">
+                    <p className="text-red-300 text-sm">
+                      This property was rejected by the admin.
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-5 border-t border-slate-800 flex justify-end">
+              <button
+                onClick={() => setOpen(false)}
+                className="px-5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white"
+              >
+                Close
+              </button>
+            </div>
+
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
-}
+};
+
+export default ViewFeedbackModal;
