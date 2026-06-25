@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/app/lib/auth-client";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -10,8 +11,16 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
+
+      const{data:token}= await authClient.token();
+      console.log(token)
+
       setLoading(true);
-      const res = await fetch("http://localhost:5000/user");
+      const res = await fetch("http://localhost:5000/user",{
+        headers:{
+          authorization : `Bearer ${token.token}`
+        }
+      });
       const data = await res.json();
       setUsers(data);
     } catch (err) {
@@ -27,11 +36,23 @@ export default function UsersPage() {
 
   const updateRole = async (id, role) => {
     try {
+
+      const {data :token} = await authClient.token()
+
+
+
+
       setUpdatingId(id);
 
       const res = await fetch(`http://localhost:5000/user/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          authorization : `Bearer ${token.token}`
+         }
+        
+        
+        
+        ,
         body: JSON.stringify({ role }),
       });
 
