@@ -22,7 +22,7 @@ const EditBtn = ({ item }) => {
   const handleUpdate = async () => {
     try {
       const {data:token} = await authClient.token();
-        console.log(token.token,"tok")
+        
     
       const res = await fetch(
         `http://localhost:5000/allhome/${item._id}`,

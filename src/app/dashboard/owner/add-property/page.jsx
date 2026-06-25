@@ -13,6 +13,7 @@ import {
   PlusCircle 
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { authClient } from "@/app/lib/auth-client";
 
 export default function AddPropertyForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,10 +38,16 @@ export default function AddPropertyForm() {
     console.log(setIsSubmitting)
 
     try {
+
+      const {data:token} = await authClient.token();
+      console.log(token.token)
+
+
         const res = await fetch("http://localhost:5000/allhome", {
   method: "POST",
   headers: {
     "content-type": "application/json",
+    authorization : `Bearer ${token.token}`
   },
   body: JSON.stringify(formData),
 });

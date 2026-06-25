@@ -12,7 +12,7 @@ const router = useRouter()
     const delHandler= async()=>{
       
             const {data:token} = await authClient.token();
-              console.log(token.token,"tok")
+            
 
 
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import PaginationCustomIcons from "@/app/pagination/page";
+import { authClient } from "@/app/lib/auth-client";
 
 const LIMIT = 3;
 
@@ -14,8 +15,16 @@ const Page = () => {
   // FETCH BOOKINGS
   const fetchBookings = async (currentPage = 1) => {
     try {
+      const {data:token} = await authClient.token()
+     
+
+
       const res = await fetch(
-        `http://localhost:5000/Bookings?page=${currentPage}&limit=${LIMIT}`
+        `http://localhost:5000/Bookings?page=${currentPage}&limit=${LIMIT}`,
+          {headers:
+               {
+            authorization : `Bearer ${token.token}`
+          }}
       );
 
       const data = await res.json();
@@ -35,10 +44,16 @@ const Page = () => {
   // UPDATE STATUS
   const updateStatus = async (id, status) => {
     try {
+
+      const {data:token}= await authClient.token();
+      console.log(token)
+
+
       const res = await fetch(`http://localhost:5000/Bookings/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization : `Bearer ${token.token}`
         },
         body: JSON.stringify({ status }),
       });

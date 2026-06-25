@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { LocateIcon, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { authClient } from "../lib/auth-client";
 
 const AllProperties = () => {
   const [properties, setProperties] = useState([]);
@@ -19,10 +20,20 @@ const AllProperties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
+        
+              const {data:token} = await authClient.token()
+
         setLoading(true);
 
         const res = await fetch(
-          `http://localhost:5000/allhome?page=${page}&limit=6`
+          `http://localhost:5000/allhome?page=${page}&limit=6`,
+           {headers:
+               {
+            authorization : `Bearer ${token.token}`
+          }}
+
+
+
         );
 
         const data = await res.json();
