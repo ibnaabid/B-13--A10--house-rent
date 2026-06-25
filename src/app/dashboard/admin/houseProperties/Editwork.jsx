@@ -4,6 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/app/lib/auth-client";
 
 const Editwork = ({ home }) => {
     const router = useRouter()
@@ -22,12 +23,17 @@ const Editwork = ({ home }) => {
 
   const handleUpdate = async () => {
     try {
+
+      const {data:token} = await authClient.token()
+
+
       const res = await fetch(
         `http://localhost:5000/allhome/${home._id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization : `Bearer ${token.token}`
           },
           body: JSON.stringify(form),
         }

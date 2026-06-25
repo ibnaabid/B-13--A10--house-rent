@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/app/lib/auth-client";
 import { HeartCrack } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -8,10 +9,19 @@ const DelteFav = ({ item }) => {
   const router = useRouter()
   const dishandler = async () => {
     try {
+
+      const {data:token} = await authClient.token()
+
+
       const res = await fetch(
-        `http://localhost:5000/favorites/${item._id}`,
+        `http://localhost:5000/favorites/${item._id}`
+        ,
         {
           method: "DELETE",
+          headers:
+          {
+            authorization : `Bearer ${token.token}`
+          }
         }
       );
 

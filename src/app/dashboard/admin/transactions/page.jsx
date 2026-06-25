@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import PaginationCustomIcons from "@/app/pagination/page";
+import { authClient } from "@/app/lib/auth-client";
 
 const LIMIT = 10;
 
@@ -13,8 +14,17 @@ export default function Page() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
+
+        const {data:token} = await authClient.token()
+
+
         const res = await fetch(
-          `http://localhost:5000/Bookings?page=${page}&limit=${LIMIT}`
+          `http://localhost:5000/Bookings?page=${page}&limit=${LIMIT}`,{
+            headers:
+            {
+              authorization : `Bearer ${token.token}`
+            }
+          }
         );
 
         const data = await res.json();

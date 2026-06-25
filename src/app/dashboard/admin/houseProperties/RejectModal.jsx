@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { authClient } from "@/app/lib/auth-client";
 
 const RejectModal = ({ home }) => {
   const [open, setOpen] = useState(false);
@@ -12,6 +13,10 @@ const RejectModal = ({ home }) => {
   const router = useRouter();
 
   const handleSubmit = async () => {
+
+    const {data:token} = await authClient.token()
+
+
     if (!feedback) {
       return toast.error("Please write feedback");
     }
@@ -26,6 +31,7 @@ const RejectModal = ({ home }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token.token}`
           },
           body: JSON.stringify({
             feedback,
@@ -41,6 +47,7 @@ const RejectModal = ({ home }) => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization : `Bearer ${token.token}`
           },
           body: JSON.stringify({
             status: "Rejected",

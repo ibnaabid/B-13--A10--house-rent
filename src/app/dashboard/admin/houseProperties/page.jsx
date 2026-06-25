@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Editwork from "./Editwork";
 import Deletework from "./Deletework";
 import RejectModal from "./RejectModal";
+import { authClient } from "@/app/lib/auth-client";
 
 export default function Page() {
   const [bookings, setBookings] = useState([]);
@@ -13,8 +14,18 @@ export default function Page() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
+
+        const {data:token} = await authClient.token();
+      
+
+
         const res = await fetch(
-          `http://localhost:5000/allhome?page=${page}&limit=3`
+          `http://localhost:5000/allhome?page=${page}&limit=3`,
+          {
+            headers :{
+              authorization : `Bearer ${token.token}`
+            }
+          }
         );
 
         const data = await res.json();
@@ -31,12 +42,16 @@ export default function Page() {
 
   const updateStatus = async (id, status) => {
     try {
+      const {data :token} = await authClient.token()
+      console.log(token,"gettoken")
+
       const res = await fetch(
         `http://localhost:5000/allhome/${id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization : `Bearer ${token.token}`
           },
           body: JSON.stringify({ status }),
         }

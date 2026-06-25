@@ -1,7 +1,12 @@
-import React from 'react';
+import { authClient } from '@/app/lib/auth-client';
+
 
 const Deletework = ({home}) => {
     const handleDelete = async () => {
+
+      const {data:token} = await authClient.token()
+     
+
   const confirmDelete = confirm("Are you sure?");
 
   if (!confirmDelete) return;
@@ -10,6 +15,7 @@ const Deletework = ({home}) => {
     `http://localhost:5000/allhome/${home._id}`,
     {
       method: "DELETE",
+      authorization : `Bearer ${token.token}`
     }
   );
 
