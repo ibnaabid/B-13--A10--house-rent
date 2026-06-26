@@ -1,22 +1,16 @@
 import { HeartCrack, Trash2 } from "lucide-react";
 import DelteFav from "./DelteFav";
-// import { authClient } from "@/app/lib/auth-client";
-import { auth } from "@/app/lib/auth";
-import { headers } from "next/headers";
+// import { authClient } from "@/app/
 
 
 const Page = async () => {
 
-  const token = await auth.api.getToken({
-    headers: await headers()
-  })
+  
 
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/favorites`, {
     cache: "no-store",
-    headers:{
-      authorization : `Bearer ${token.token}`
-    }
+  
   });
 
   const data = await res.json();
