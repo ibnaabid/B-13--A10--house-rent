@@ -16,7 +16,7 @@ export default function UsersPage() {
       console.log(token)
 
       setLoading(true);
-      const res = await fetch("http://localhost:5000/user",{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user`,{
         headers:{
           authorization : `Bearer ${token.token}`
         }
@@ -45,7 +45,7 @@ export default function UsersPage() {
 
       setUpdatingId(id);
 
-      const res = await fetch(`http://localhost:5000/user/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/user/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json",
           authorization : `Bearer ${token.token}`

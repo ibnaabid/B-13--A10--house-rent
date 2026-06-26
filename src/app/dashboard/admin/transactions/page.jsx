@@ -19,7 +19,7 @@ export default function Page() {
 
 
         const res = await fetch(
-          `http://localhost:5000/Bookings?page=${page}&limit=${LIMIT}`,{
+          `${process.env.NEXT_PUBLIC_BASE_URL}/Bookings?page=${page}&limit=${LIMIT}`,{
             headers:
             {
               authorization : `Bearer ${token.token}`

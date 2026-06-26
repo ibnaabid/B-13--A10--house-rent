@@ -43,7 +43,7 @@ export default function AddPropertyForm() {
       console.log(token.token)
 
 
-        const res = await fetch("http://localhost:5000/allhome", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/allhome`, {
   method: "POST",
   headers: {
     "content-type": "application/json",

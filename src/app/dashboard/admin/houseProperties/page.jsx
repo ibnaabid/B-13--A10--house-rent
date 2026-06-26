@@ -20,7 +20,7 @@ export default function Page() {
 
 
         const res = await fetch(
-          `http://localhost:5000/allhome?page=${page}&limit=3`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=3`,
           {
             headers :{
               authorization : `Bearer ${token.token}`
@@ -46,7 +46,7 @@ export default function Page() {
       console.log(token,"gettoken")
 
       const res = await fetch(
-        `http://localhost:5000/allhome/${id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/allhome/${id}`,
         {
           method: "PATCH",
           headers: {

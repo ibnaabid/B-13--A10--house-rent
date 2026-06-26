@@ -27,7 +27,7 @@ export default async function Success({ searchParams }) {
     try {
       // ১. বুকিং ইতিমধ্যে ডাটাবেজে আছে কি না চেক করা
       const checkRes = await fetch(
-        `http://localhost:5000/Bookings/${session_id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/Bookings/${session_id}`,
         { cache: "no-store" }
       );
 
@@ -50,7 +50,7 @@ export default async function Success({ searchParams }) {
           createdAt:     new Date().toISOString(), 
         };
 
-        const postRes = await fetch("http://localhost:5000/Bookings", {
+        const postRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/Bookings`, {
           method:  "POST",
           headers: { "Content-Type": "application/json" },
           body:    JSON.stringify(bookingData),

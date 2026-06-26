@@ -10,7 +10,7 @@ export default function ReviewsSection() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const res = await fetch("http://localhost:5000/reviews");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews`);
         const data = await res.json();
         setReviews(data || []);
       } catch (error) {

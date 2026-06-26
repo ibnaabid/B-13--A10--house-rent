@@ -14,7 +14,7 @@ const Deletebtn = ({item}) => {
             console.log(token)
             
 
-        const res = await fetch (`http://localhost:5000/allhome/${item?._id}`,{
+        const res = await fetch (`${process.env.NEXT_PUBLIC_BASE_URL}/allhome/${item?._id}`,{
             method:"DELETE",
             headers:{
                 "content-type":"application/json",

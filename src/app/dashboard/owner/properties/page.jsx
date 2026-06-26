@@ -23,7 +23,7 @@ const Property = () => {
         const {data:token} = await authClient.token();
       
         const res = await fetch(
-          `http://localhost:5000/allhome?page=${page}&limit=${limit}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=${limit}`,
 
              {headers:
                {

@@ -23,7 +23,7 @@ const FavBtn = ({ data }) => {
     try {
       setLoading(true);
 
-      const res = await fetch(`http://localhost:5000/favorites/${userId}`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/favorites/${userId}`,
          {
         method: "POST",
         headers: {

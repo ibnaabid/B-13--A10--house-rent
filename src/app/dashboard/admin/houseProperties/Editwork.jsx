@@ -28,7 +28,7 @@ const Editwork = ({ home }) => {
 
 
       const res = await fetch(
-        `http://localhost:5000/allhome/${home._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/allhome/${home._id}`,
         {
           method: "PATCH",
           headers: {

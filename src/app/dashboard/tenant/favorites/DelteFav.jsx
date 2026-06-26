@@ -14,7 +14,7 @@ const DelteFav = ({ item }) => {
 
 
       const res = await fetch(
-        `http://localhost:5000/favorites/${item._id}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/favorites/${item._id}`
         ,
         {
           method: "DELETE",

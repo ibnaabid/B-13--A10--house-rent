@@ -18,7 +18,7 @@ useEffect(() => {
 
 
       const res = await fetch(
-        `http://localhost:5000/Bookings?page=${page}&limit=3`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/Bookings?page=${page}&limit=3`,
         
         {
           headers: {

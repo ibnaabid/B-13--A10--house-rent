@@ -25,7 +25,7 @@ const EditBtn = ({ item }) => {
         
     
       const res = await fetch(
-        `http://localhost:5000/allhome/${item._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/allhome/${item._id}`,
         {
           method: "PATCH",
           headers: {

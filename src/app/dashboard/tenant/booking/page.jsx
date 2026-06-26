@@ -19,7 +19,7 @@ const Page = () => {
      
       try {
         const res = await fetch(
-          `http://localhost:5000/Bookings?page=${page}&limit=${limit}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/Bookings?page=${page}&limit=${limit}`,
           
          {headers: {
             authorization : `Bearer ${token.token}`

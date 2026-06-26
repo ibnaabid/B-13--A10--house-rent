@@ -26,7 +26,7 @@ const AllProperties = () => {
         setLoading(true);
 
         const res = await fetch(
-          `http://localhost:5000/allhome?page=${page}&limit=6`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`,
            {headers:
                {
             authorization : `Bearer ${token.token}`

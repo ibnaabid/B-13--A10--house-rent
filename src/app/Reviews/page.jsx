@@ -30,7 +30,7 @@ export default function ReviewForm({ propertyId }) {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/reviews", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

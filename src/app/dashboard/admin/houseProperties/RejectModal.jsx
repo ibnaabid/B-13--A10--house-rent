@@ -27,7 +27,7 @@ const RejectModal = ({ home }) => {
 
       // Save feedback
       await fetch(
-        `http://localhost:5000/reject-feedback/${home._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/reject-feedback/${home._id}`,
         {
           method: "POST",
           headers: {
@@ -43,7 +43,7 @@ const RejectModal = ({ home }) => {
 
       // Update property status
       const res = await fetch(
-        `http://localhost:5000/allhome/${home._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/allhome/${home._id}`,
         {
           method: "PATCH",
           headers: {

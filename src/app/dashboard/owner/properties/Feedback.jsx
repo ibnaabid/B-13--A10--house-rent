@@ -20,7 +20,7 @@ const ViewFeedbackModal = ({ item }) => {
 
 
       const res = await fetch(
-        `http://localhost:5000/reject-feedback/${item?._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/reject-feedback/${item?._id}`,
         {
           headers:
           {

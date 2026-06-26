@@ -20,7 +20,7 @@ const Page = () => {
 
 
       const res = await fetch(
-        `http://localhost:5000/Bookings?page=${currentPage}&limit=${LIMIT}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/Bookings?page=${currentPage}&limit=${LIMIT}`,
           {headers:
                {
             authorization : `Bearer ${token.token}`
@@ -49,7 +49,7 @@ const Page = () => {
       console.log(token)
 
 
-      const res = await fetch(`http://localhost:5000/Bookings/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/Bookings/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
