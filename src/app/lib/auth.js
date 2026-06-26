@@ -11,7 +11,7 @@ const db = client.db("HouseRent");
 
 export const auth = betterAuth({
   
-    baseURL: process.env.BETTER_AUTH_URL, 
+    baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL, 
     
   database: mongodbAdapter(db),
   user: {
