@@ -28,6 +28,7 @@ const Page = () => {
       );
 
       const data = await res.json();
+      console.log(process.env.NEXT_PUBLIC_BASE_URL,"NEXT_PUBLIC_BASE_URL")
 
       setBookings(data.data || []);
       setTotalPages(data.totalPages || 1);
