@@ -20,24 +20,10 @@ const AllProperties = () => {
 useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const { data: tokenData } = await authClient.token();
-        
-        if (!tokenData?.token) {
-          setLoading(false);
-          return;
-        }
-
         setLoading(true);
-
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`,
-          {
-            headers: {
-              authorization: `Bearer ${tokenData.token}`
-            }
-          }
+          `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`
         );
-
         const data = await res.json();
         setProperties(data.data || []);
         setTotalPages(data.totalPages || 1);
@@ -48,9 +34,9 @@ useEffect(() => {
         setLoading(false);
       }
     };
-
     fetchProperties();
   }, [page]);
+  
 
   const filteredProperties = useMemo(() => {
     let result = [...properties];
