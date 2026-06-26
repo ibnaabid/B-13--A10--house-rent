@@ -155,11 +155,11 @@ useEffect(() => {
 
                     {/* Action */}
                     <td className="px-4 sm:px-8 py-4 sm:py-5 text-center">
-                      <Link href={"/dashboard/owner/bookings"}>
+                    
                         <button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:scale-105 active:scale-95 transition-all px-4 sm:px-5 py-1.5 sm:py-2 rounded-xl text-white text-xs sm:text-sm font-medium shadow-md">
                           View
                         </button>
-                      </Link>
+                
                     </td>
                   </tr>
                 ))

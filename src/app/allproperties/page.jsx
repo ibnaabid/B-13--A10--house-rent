@@ -17,27 +17,28 @@ const AllProperties = () => {
   const [propertyType, setPropertyType] = useState("");
   const [sort, setSort] = useState("");
 
-  useEffect(() => {
+useEffect(() => {
     const fetchProperties = async () => {
       try {
+        const { data: tokenData } = await authClient.token();
         
-              const {data:token} = await authClient.token()
+        if (!tokenData?.token) {
+          setLoading(false);
+          return;
+        }
 
         setLoading(true);
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`,
-           {headers:
-               {
-            authorization : `Bearer ${token.token}`
-          }}
-
-
-
+          {
+            headers: {
+              authorization: `Bearer ${tokenData.token}`
+            }
+          }
         );
 
         const data = await res.json();
-
         setProperties(data.data || []);
         setTotalPages(data.totalPages || 1);
       } catch (err) {
