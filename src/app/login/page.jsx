@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-// import { authClient } from "@/app/lib/auth-client";
-import { Mail, Lock, Loader2, LogIn, Home } from "lucide-react";
+import { Mail, Lock, Loader2, LogIn, Home, Eye, EyeOff } from "lucide-react"; // Eye এবং EyeOff আইকন ইমপোর্ট করা হয়েছে
 import Link from "next/link";
 import { authClient } from "../lib/auth-client";
 
@@ -14,6 +13,7 @@ export default function LoginPage() {
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // পাসওয়ার্ড দেখানোর জন্য state
 
   useEffect(() => {
     if (isPending) return;
@@ -152,13 +152,21 @@ export default function LoginPage() {
               <Lock className="absolute left-3.5 top-3.5 text-slate-500" size={17} />
               <input
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"} // state অনুযায়ী টাইপ চেঞ্জ হবে
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 outline-none rounded-xl text-sm transition-all text-white placeholder-slate-600"
+                className="w-full pl-11 pr-12 py-3 bg-slate-950 border border-slate-800 focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 outline-none rounded-xl text-sm transition-all text-white placeholder-slate-600"
                 required
               />
+              {/* চোখ বা Eye বাটন */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-3.5 text-slate-500 hover:text-red-700/30 transition-colors"
+              >
+                {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+              </button>
             </div>
           </div>
 
