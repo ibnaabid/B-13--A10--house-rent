@@ -37,5 +37,5 @@ const user = session?.user;
 }
 
 export const config = {
-  matcher: ['/allproperties/:path*',"/allproperties/:id/:path*","/dashboard/tenant","/dashboard/admin","/Reviews"],
+  matcher: ["/dashboard/tenant","/dashboard/admin","/dashboard/owner"],
 }
