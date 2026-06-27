@@ -20,10 +20,10 @@ const AllProperties = () => {
 useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const { data: tokenData } = await authClient.token();
+        const { data: token } = await authClient.token();
         
         // token না থাকলে wait করো
-        if (!tokenData?.token) {
+        if (!token?.token) {
           setLoading(false);
           return;
         }
@@ -34,7 +34,7 @@ useEffect(() => {
           `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`,
           {
             headers: {
-              authorization: `Bearer ${tokenData.token}`
+              authorization: `Bearer ${token.token}`
             }
           }
         );
