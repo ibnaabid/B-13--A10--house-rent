@@ -4,11 +4,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
 import { authClient } from "@/app/lib/auth-client";
-import { useRouter } from "next/navigation";
 
 const EditBtn = ({ item }) => {
-  const router = useRouter()
-  
   const [form, setForm] = useState({
     title: item?.title || "",
     location: item?.location || "",
@@ -43,7 +40,7 @@ const EditBtn = ({ item }) => {
 
       if (data.modifiedCount > 0) {
         toast.success("Property updated successfully");
-      router.refresh()
+        window.location.reload(); // simple refresh
       } else {
         toast.error("No changes detected");
       }

@@ -42,8 +42,7 @@ const Editwork = ({ home }) => {
       const data = await res.json();
 
       toast.success("successfully update data")
-      router.refresh()
-   
+      window.location.reload()
     } catch (error) {
       toast.error("Update failed");
     }

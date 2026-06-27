@@ -1,12 +1,9 @@
 import { authClient } from '@/app/lib/auth-client';
-import { router } from 'better-auth/api';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 // import { headers } from 'next/headers';
 
 
 const Deletework = ({home}) => {
-  const router = useRouter()
     const handleDelete = async () => {
 
       const {data:token} = await authClient.token()
@@ -30,7 +27,7 @@ const Deletework = ({home}) => {
 
   if (data.deletedCount > 0) {
     toast.success("Deleted Successfully");
-    router.refresh()
+    window.location.reload();
   }
 };
     return (
