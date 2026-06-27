@@ -29,16 +29,16 @@ const ViewFeedbackModal = ({ item }) => {
           },
         }
       );
+const data = await res.json();
 
-      const text = await res.json();
+if (!data) {
+  setFeedback("No feedback found");
+  return;
+}
 
-      if (!text) {
-        setFeedback("No feedback found");
-        return;
-      }
+setFeedback(data?.feedback || "No feedback found");
 
-      const data = JSON.parse(text);
-      setFeedback(data?.feedback || "No feedback found");
+     
 
     } catch (error) {
       console.log(error);
