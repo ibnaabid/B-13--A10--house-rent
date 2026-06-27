@@ -20,25 +20,10 @@ const AllProperties = () => {
 useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const { data: token } = await authClient.token();
-        
-        // token না থাকলে wait করো
-        if (!token?.token) {
-          setLoading(false);
-          return;
-        }
-
         setLoading(true);
-
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`,
-          {
-            headers: {
-              authorization: `Bearer ${token.token}`
-            }
-          }
+          `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`
         );
-
         const data = await res.json();
         setProperties(data.data || []);
         setTotalPages(data.totalPages || 1);
@@ -49,7 +34,6 @@ useEffect(() => {
         setLoading(false);
       }
     };
-
     fetchProperties();
   }, [page]);
   
