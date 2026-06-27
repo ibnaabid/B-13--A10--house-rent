@@ -25,6 +25,7 @@ useEffect(() => {
           `${process.env.NEXT_PUBLIC_BASE_URL}/allhome?page=${page}&limit=6`
         );
         const data = await res.json();
+        console.log(data)
         setProperties(data.data || []);
         setTotalPages(data.totalPages || 1);
       } catch (err) {
