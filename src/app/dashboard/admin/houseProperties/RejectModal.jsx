@@ -21,9 +21,10 @@ const RejectModal = ({ home }) => {
     }
 
     try {
+         setLoading(true);
       
     const {data:token} = await authClient.token()
-      setLoading(true);
+   
 
       // Save feedback
       await fetch(
@@ -62,7 +63,8 @@ const RejectModal = ({ home }) => {
         toast.success("Property Rejected");
         setOpen(false);
         setFeedback("");
-      window.location.reload()
+        router.refresh()
+
       }
     } catch (error) {
       console.log(error);

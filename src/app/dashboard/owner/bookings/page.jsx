@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import PaginationCustomIcons from "@/app/pagination/page";
 import { authClient } from "@/app/lib/auth-client";
+// import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
 
 const LIMIT = 3;
 
 const Page = () => {
+  const router = useRouter()
   const [bookings, setBookings] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -62,6 +65,7 @@ const Page = () => {
       if (res.ok) {
         toast.success(`Booking ${status}`);
         fetchBookings(page);
+        router.refresh()
       } else {
         toast.error("Something went wrong");
       }

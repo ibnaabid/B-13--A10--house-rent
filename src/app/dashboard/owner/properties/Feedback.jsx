@@ -17,6 +17,7 @@ const ViewFeedbackModal = ({ item }) => {
     try {
 
       const {data:token} = await authClient.token()
+      if (!token?.token) return;
 
 
       const res = await fetch(
@@ -47,7 +48,7 @@ const ViewFeedbackModal = ({ item }) => {
         onClick={handleOpen}
         className="bg-red-700 flex px-3 pb-2 gap-2 hover:bg-violet-700 text-white p-2 rounded-xl transition"
       >
-        <Eye size={18} /> Reject
+        <Eye size={18} /> View Reject-Feedback
       </button>
 
       {open && (

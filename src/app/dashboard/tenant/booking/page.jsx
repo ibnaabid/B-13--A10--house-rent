@@ -23,12 +23,8 @@ const Page = () => {
           
          {headers: {
             authorization : `Bearer ${token.token}`
+          }       
           }
-
-            
-          }
-
-
 
         );
 
