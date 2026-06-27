@@ -25,6 +25,8 @@ export async function POST(req) {
     const phone = formData.get("phone");
     const notes = formData.get("notes");
 
+    console.log(amount,propertyId,propertyName)
+
     const stripeSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
 

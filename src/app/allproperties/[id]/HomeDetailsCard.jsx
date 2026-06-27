@@ -7,6 +7,7 @@ import FavBtn from "./FavBtn";
 
 const HomeDetailsCard = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
+  console.log(data)
 
 
   return (
