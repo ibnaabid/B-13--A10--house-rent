@@ -63,7 +63,7 @@ const RejectModal = ({ home }) => {
         toast.success("Property Rejected");
         setOpen(false);
         setFeedback("");
-        router.refresh()
+       window.location.reload()
 
       }
     } catch (error) {
